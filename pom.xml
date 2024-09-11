@@ -1,0 +1,104 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.drxgb</groupId>
+	<artifactId>dialogtranslator</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>XGB's Dialog Translator</name>
+	<description>Utilitário para mapear os diálogos de acordo com o idioma selecionado pelo usuário na aplicação.</description>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>21</maven.compiler.source>
+		<maven.compiler.target>21</maven.compiler.target>
+	</properties>
+
+	<dependencies>
+		<!-- JavaFX Controls -->
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-controls</artifactId>
+			<version>22.0.1</version>
+		</dependency>
+
+		<!-- JavaFX FXML -->
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-fxml</artifactId>
+			<version>22.0.1</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<version>5.11.0</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- XGB Utils -->
+		<dependency>
+			<groupId>com.drxgb</groupId>
+			<artifactId>utils</artifactId>
+			<version>1.10.3</version>
+		</dependency>
+
+		<!-- XGB JavaFX Utils -->
+		<dependency>
+			<groupId>com.drxgb</groupId>
+			<artifactId>javafx-utils</artifactId>
+			<version>1.7.4</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<finalName>Dialog Translator</finalName>
+
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.0</version>
+				<configuration>
+					<release>21</release>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.openjfx</groupId>
+				<artifactId>javafx-maven-plugin</artifactId>
+				<version>0.0.8</version>
+				<executions>
+					<execution>
+						<!-- Default configuration for running -->
+						<!-- Usage: mvn clean javafx:run -->
+						<id>default-cli</id>
+						<configuration>
+							<mainClass>com.drxgb.dialogtranslator.App</mainClass>
+						</configuration>
+					</execution>
+					<execution>
+						<!-- Debug -->
+						<!-- Usage: mvn clean javafx:run@debug -->
+						<id>debug</id>
+						<configuration>
+							<options>
+								<option>
+									-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:8000
+								</option>
+							</options>
+							<mainClass>com.drxgb.dialogtranslator.App</mainClass>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>
