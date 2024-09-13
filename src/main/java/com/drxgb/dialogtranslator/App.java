@@ -2,10 +2,13 @@ package com.drxgb.dialogtranslator;
 
 import java.io.IOException;
 
+import com.drxgb.dialogtranslator.service.StageTitleManager;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 /**
@@ -40,9 +43,19 @@ public class App extends Application
 	 */
 	
 	/**
+	 * A instância da aplicação.
+	 */
+	private static App instance;
+	
+	/**
+	 * Gerenciador de título da janela da aplicação.
+	 */
+	private StageTitleManager titleManager;
+	
+	/**
 	 * Cena principal da aplicação.
 	 */
-	private static Scene scene;
+	private Scene scene;
 	
 	
 	/*
@@ -57,10 +70,15 @@ public class App extends Application
 	@Override
 	public void start(Stage stage) throws IOException
 	{
+		Image icon = new Image(getClass().getResourceAsStream("icon/app.png"));
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("view/MainView.fxml"));
 		Parent root = loader.load();
 		
+		instance = this;
+		titleManager = new StageTitleManager(stage, NAME);
 		scene = new Scene(root, 640, 480);
+		
+		stage.getIcons().add(icon);
 		stage.setScene(scene);
 		stage.show();
 	}
@@ -84,11 +102,39 @@ public class App extends Application
 	
 	
 	/**
+	 * Recebe a instância da aplicação.
+	 * 
+	 * @return A instância da aplicação.
+	 */
+	public static App getInstance()
+	{
+		return instance;
+	}
+	
+	
+	/*
+	 * ===========================================================
+	 * 			*** GETTERS ***
+	 * ===========================================================
+	 */
+	
+	/**
+	 * Recebe o gerenciador de título da janela da aplicação.
+	 * 
+	 * @return O gerenciador de título.
+	 */
+	public StageTitleManager getTitleManager()
+	{
+		return titleManager;
+	}
+
+	
+	/**
 	 * Recebe a cena atual.
 	 * 
 	 * @return A cena atual.
 	 */
-	public static Scene getScene()
+	public Scene getScene()
 	{
 		return scene;
 	}
@@ -99,7 +145,7 @@ public class App extends Application
 	 * 
 	 * @return A janela da aplicação.
 	 */
-	public static Stage getStage()
+	public Stage getStage()
 	{
 		return (Stage)(getScene().getWindow());
 	}

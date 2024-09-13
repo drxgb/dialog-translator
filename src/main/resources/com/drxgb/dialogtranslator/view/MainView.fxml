@@ -9,6 +9,8 @@
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
@@ -24,6 +26,13 @@
                      <accelerator>
                         <KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                      </accelerator>
+                     <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icon/open.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
                   </MenuItem>
                   <Menu mnemonicParsing="false" text="Open Recent" />
                   <SeparatorMenuItem mnemonicParsing="false" />
@@ -31,6 +40,13 @@
                      <accelerator>
                         <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                      </accelerator>
+                     <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icon/save.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
                   </MenuItem>
                   <MenuItem mnemonicParsing="false" text="Save As...">
                      <accelerator>
@@ -42,6 +58,13 @@
                      <accelerator>
                         <KeyCodeCombination alt="DOWN" code="F4" control="UP" meta="UP" shift="UP" shortcut="UP" />
                      </accelerator>
+                     <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icon/exit.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
                   </MenuItem>
             </items>
           </Menu>
@@ -54,19 +77,47 @@
                      <toggleGroup>
                         <ToggleGroup fx:id="menuViewMode" />
                      </toggleGroup>
+                     <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icon/phrase.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
                   </RadioMenuItem>
                   <RadioMenuItem fx:id="mnitLanguages" mnemonicParsing="false" onAction="#onMnitLanguagesAction" text="Languages" toggleGroup="$menuViewMode">
                      <accelerator>
                         <KeyCodeCombination alt="UP" code="DIGIT2" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                      </accelerator>
+                     <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icon/language.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
                   </RadioMenuItem>
                   <SeparatorMenuItem mnemonicParsing="false" />
-                  <Menu fx:id="mnuStyle" mnemonicParsing="false" text="Style" />
+                  <Menu fx:id="mnuStyle" mnemonicParsing="false" text="Style">
+                     <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icon/style.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></Menu>
                </items>
             </Menu>
           <Menu mnemonicParsing="false" text="Help">
             <items>
-              <MenuItem mnemonicParsing="false" text="About..." />
+              <MenuItem mnemonicParsing="false" text="About...">
+                     <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icon/about.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></MenuItem>
             </items>
           </Menu>
         </menus>
@@ -79,8 +130,22 @@
             <ToggleButton fx:id="btnPhrases" mnemonicParsing="false" onAction="#onBtnPhrasesAction" prefHeight="36.0" prefWidth="128.0" selected="true" text="Phrases">
                <toggleGroup>
                   <ToggleGroup fx:id="viewMode" />
-               </toggleGroup></ToggleButton>
-            <ToggleButton fx:id="btnLanguages" mnemonicParsing="false" onAction="#onBtnLanguagesAction" prefHeight="36.0" prefWidth="128.0" text="Languages" toggleGroup="$viewMode" />
+               </toggleGroup>
+               <graphic>
+                  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icon/phrase.png" />
+                     </image>
+                  </ImageView>
+               </graphic></ToggleButton>
+            <ToggleButton fx:id="btnLanguages" mnemonicParsing="false" onAction="#onBtnLanguagesAction" prefHeight="36.0" prefWidth="128.0" text="Languages" toggleGroup="$viewMode">
+               <graphic>
+                  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icon/language.png" />
+                     </image>
+                  </ImageView>
+               </graphic></ToggleButton>
          </children>
       </HBox>
       <StackPane fx:id="stkMain">
