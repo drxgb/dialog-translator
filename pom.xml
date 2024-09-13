@@ -7,7 +7,10 @@
 	<artifactId>dialogtranslator</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>XGB's Dialog Translator</name>
-	<description>Utilitário para mapear os diálogos de acordo com o idioma selecionado pelo usuário na aplicação.</description>
+	<description>
+		Utilitário para mapear os diálogos de acordo com o idioma selecionado
+		pelo usuário na aplicação.
+	</description>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -20,17 +23,18 @@
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-controls</artifactId>
-			<version>22.0.1</version>
+			<version>22.0.2</version>
 		</dependency>
 
 		<!-- JavaFX FXML -->
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-fxml</artifactId>
-			<version>22.0.1</version>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
+			<version>22.0.2</version>
+		</dependency>	
+	
+		<!--
+		https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
