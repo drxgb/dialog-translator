@@ -46,6 +46,15 @@ public final class Language
 	{
 		this(name, false);
 	}
+	
+	
+	/**
+	 * Cria um idioma vazio.
+	 */
+	public Language()
+	{
+		this("", false);
+	}
 
 	
 	/*

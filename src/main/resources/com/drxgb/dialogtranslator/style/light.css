@@ -1,0 +1,39 @@
+/*
+ * ToolBar
+ */ 
+.separator:vertical
+{
+	-fx-padding: 0 8px;
+}
+
+
+.separator:horizontal
+{
+	-fx-padding: 8px 0;
+}
+
+
+/*
+ * Buttons
+ */
+.btn-remove
+{
+	-fx-color: rgb(255, 80, 80);
+	-fx-text-fill: white;
+	-fx-border-color: rgb(192, 0, 0);
+	-fx-underline: false;
+	-fx-border-width: 2px;
+}
+
+
+.btn-remove:hover
+{
+	-fx-color: rgb(255, 20, 20);
+}
+
+
+.btn-remove:pressed
+{
+	-fx-color: rgb(192, 0, 0);	
+	-fx-border-color: rgb(255, 20, 20);
+}

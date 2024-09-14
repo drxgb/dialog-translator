@@ -1,8 +1,11 @@
 package com.drxgb.dialogtranslator.controller;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import com.drxgb.dialogtranslator.component.LanguagesPane;
+import com.drxgb.dialogtranslator.component.PhrasesPane;
 import com.drxgb.util.ValueHandler;
 
 import javafx.collections.ObservableList;
@@ -13,7 +16,8 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.WindowEvent;
 
 /**
  * Controlador da janela principal da aplicação.
@@ -35,10 +39,13 @@ public class MainController implements Initializable
 	@FXML public RadioMenuItem mnitLanguages;
 	
 	// Base
-	@FXML public StackPane stkMain;
+	@FXML public AnchorPane panMain;
 	@FXML public ToggleGroup viewMode;
 	@FXML public ToggleButton btnPhrases;
 	@FXML public ToggleButton btnLanguages;
+	
+	// Telas internas
+	private ObservableList<Node> viewModes;
 
 	
 	/*
@@ -53,9 +60,15 @@ public class MainController implements Initializable
 	@Override
 	public void initialize(URL location, ResourceBundle resources)
 	{
-		// TODO Inicializar os modos de visão de arquivos FXML distintos.
-		
-		initializeToggleButtons();
+		try
+		{
+			initializeViewModes();		
+			initializeToggleButtons();
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
 	}
 	
 	
@@ -65,6 +78,20 @@ public class MainController implements Initializable
 	 * ===========================================================
 	 */
 	
+	/**
+	 * Ação ao fechar a janela.
+	 * 
+	 * @param ev Evento da janela disparado.
+	 */
+	public void onCloseAction(WindowEvent ev)
+	{
+		// TODO: Verificar arquivo não salvo.
+	}
+
+	
+	/**
+	 * Ação ao clicar no item de menu "Phrases".
+	 */
 	@FXML
 	public void onMnitPhrasesAction()
 	{
@@ -72,6 +99,9 @@ public class MainController implements Initializable
 	}
 	
 	
+	/**
+	 * Ação ao clicar no item de menu "Languages".
+	 */
 	@FXML
 	public void onMnitLanguagesAction()
 	{
@@ -79,6 +109,9 @@ public class MainController implements Initializable
 	}
 	
 	
+	/**
+	 * Ação ao clicar no botão "Phrases".
+	 */
 	@FXML
 	public void onBtnPhrasesAction()
 	{
@@ -87,6 +120,9 @@ public class MainController implements Initializable
 	}
 	
 	
+	/**
+	 * Ação ao clicar no botão "Languages".
+	 */
 	@FXML
 	public void onBtnLanguagesAction()
 	{		
@@ -100,6 +136,28 @@ public class MainController implements Initializable
 	 * 			*** MÉTODOS PRIVADOS ***
 	 * ===========================================================
 	 */
+	
+	/**
+	 * Inicializa os modos de visualização.
+	 * 
+	 * @throws IOException Quando o arquivo da tela não é encontrado.
+	 */
+	private void initializeViewModes() throws IOException
+	{
+		viewModes = panMain.getChildren();
+		viewModes.add(new PhrasesPane());
+		viewModes.add(new LanguagesPane());
+		viewModes.forEach(v ->
+		{
+			AnchorPane.setTopAnchor(v, 0.0);
+			AnchorPane.setLeftAnchor(v, 0.0);
+			AnchorPane.setBottomAnchor(v, 0.0);
+			AnchorPane.setRightAnchor(v, 0.0);
+		});
+		
+		selectViewMode(0);
+	}
+	
 	
 	/**
 	 * Inicializa os botões alternados dos modos de visualização.
@@ -123,10 +181,11 @@ public class MainController implements Initializable
 	 */
 	private void selectViewMode(int index)
 	{
-		ObservableList<Node> viewModes = stkMain.getChildren();
-		
-		index = ValueHandler.clamp(index, 0, viewModes.size() - 1);
-		viewModes.forEach(v -> v.setVisible(false));
-		viewModes.get(index).setVisible(true);
+		if (viewModes.size() > 0)
+		{
+			index = ValueHandler.clamp(index, 0, viewModes.size());
+			viewModes.forEach(v -> v.setVisible(false));
+			viewModes.get(index).setVisible(true);
+		}
 	}
 }

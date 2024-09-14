@@ -55,7 +55,7 @@ public final class PhraseGroup
 	 */
 	public PhraseGroup(String name)
 	{
-		this("", new ArrayList<>());
+		this(name, new ArrayList<>());
 	}	
 
 

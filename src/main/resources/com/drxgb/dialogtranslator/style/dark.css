@@ -1,0 +1,198 @@
+.root 
+{
+	-fx-background-color: rgb(16, 16, 16);
+	-fx-text-fill: white;
+}
+
+
+/*
+ * ToolBar
+ */
+.tool-bar, .menu-bar, .split-pane 
+{
+	-fx-background-color: rgb(24, 24, 24);
+	-fx-border-color: rgb(32, 32, 32);
+}
+
+
+.context-menu
+{
+	-fx-background-color: rgb(32, 32, 32);
+}
+
+
+.separator *.line
+{
+	-fx-border-color: rgb(64, 64, 64);
+	-fx-border-width: 1px;
+}
+
+
+.separator:vertical
+{
+	-fx-padding: 0 8px;
+}
+
+
+.separator:horizontal
+{
+	-fx-padding: 8px 0;
+}
+
+
+/*
+ * Label
+ */
+.label
+{
+	-fx-text-fill: white;
+}
+
+
+/*
+ * Buttons
+ */
+.button, .toggle-button
+ {
+	-fx-color: rgb(0, 127, 255);
+	-fx-text-fill: white;
+	-fx-border-color: rgb(0, 48, 192);
+	-fx-underline: false;
+	-fx-border-width: 2px;
+}
+
+
+.button:hover, .toggle-button:hover 
+{
+	-fx-color: rgb(0, 160, 255);
+}
+
+
+.toggle-button:selected, .button:pressed 
+{
+	-fx-color: rgb(0, 20, 160);
+}
+
+
+.btn-remove
+{
+	-fx-color: rgb(255, 80, 80);
+	-fx-text-fill: white;
+	-fx-border-color: rgb(192, 0, 0);
+	-fx-underline: false;
+	-fx-border-width: 2px;
+}
+
+
+.btn-remove:hover
+{
+	-fx-color: rgb(255, 20, 20);
+}
+
+
+.btn-remove:pressed
+{
+	-fx-color: rgb(192, 0, 0);	
+	-fx-border-color: rgb(255, 20, 20);
+}
+
+
+/*
+ * Lists
+ */
+.list-view
+{
+	-fx-background-color: rgb(32, 32, 32);
+}
+
+
+.list-cell
+{
+	-fx-background-color: rgb(32, 32, 32);
+	-fx-text-fill: white;
+}
+
+
+.list-cell:even
+{
+	-fx-background-color: rgb(40, 40, 40);
+}
+
+
+.list-cell:selected
+{
+	-fx-background-color: dodgerblue;
+}
+
+
+/*
+ * TextField TextArea
+ */
+.text-field, .text-area .content
+{
+	-fx-background-color: rgb(40, 40, 40);
+	-fx-text-fill: white;
+}
+
+
+.text-area
+{
+	-fx-text-fill: white;
+}
+
+
+/*
+ * ScrollPane
+ */
+.scroll-bar
+{
+	-fx-background-color: rgb(32, 32, 32);
+}
+
+
+.scroll-bar .thumb
+{
+	-fx-background-color: rgb(60, 60, 60);
+}
+
+
+/*
+ * ComboBox
+ */
+.combo-box .list-cell:selected
+{
+	-fx-background-color: rgb(48, 48, 48);
+}
+ 
+ 
+.combo-box-base
+{
+ 	-fx-background-color: rgb(40, 40, 40);
+}
+ 
+ 
+.combo-box .list-cell:hover
+{
+	-fx-background-color: dodgerblue;
+}
+
+
+/*
+ * TabPane
+ */
+.tab-header-background
+{
+	-fx-background-color: rgb(24, 24, 24);
+}
+ 
+ 
+.tab
+{
+ 	-fx-background-color: rgb(16, 16, 16);
+}
+ 
+
+.tab .tab-label
+{
+ 	-fx-text-fill: white;
+}

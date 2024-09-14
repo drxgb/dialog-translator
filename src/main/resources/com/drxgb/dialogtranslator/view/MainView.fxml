@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
@@ -12,11 +11,11 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.input.KeyCodeCombination?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.drxgb.dialogtranslator.controller.MainController">
+<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefWidth="640.0" spacing="10.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.drxgb.dialogtranslator.controller.MainController">
    <children>
       <MenuBar>
         <menus>
@@ -105,7 +104,8 @@
                               <Image url="@../icon/style.png" />
                            </image>
                         </ImageView>
-                     </graphic></Menu>
+                     </graphic>
+                  </Menu>
                </items>
             </Menu>
           <Menu mnemonicParsing="false" text="Help">
@@ -117,50 +117,44 @@
                               <Image url="@../icon/about.png" />
                            </image>
                         </ImageView>
-                     </graphic></MenuItem>
+                     </graphic>
+                  </MenuItem>
             </items>
           </Menu>
         </menus>
       </MenuBar>
-      <HBox>
+      <VBox spacing="10.0">
+         <children>
+            <HBox>
+               <children>
+                  <ToggleButton fx:id="btnPhrases" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onBtnPhrasesAction" prefHeight="36.0" prefWidth="128.0" selected="true" text="Phrases">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="viewMode" />
+                     </toggleGroup>
+                     <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icon/phrase.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </ToggleButton>
+                  <ToggleButton fx:id="btnLanguages" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onBtnLanguagesAction" prefHeight="36.0" prefWidth="128.0" text="Languages" toggleGroup="$viewMode">
+                     <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icon/language.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </ToggleButton>
+               </children>
+            </HBox>
+            <AnchorPane fx:id="panMain" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
+         </children>
          <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </padding>
-         <children>
-            <ToggleButton fx:id="btnPhrases" mnemonicParsing="false" onAction="#onBtnPhrasesAction" prefHeight="36.0" prefWidth="128.0" selected="true" text="Phrases">
-               <toggleGroup>
-                  <ToggleGroup fx:id="viewMode" />
-               </toggleGroup>
-               <graphic>
-                  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../icon/phrase.png" />
-                     </image>
-                  </ImageView>
-               </graphic></ToggleButton>
-            <ToggleButton fx:id="btnLanguages" mnemonicParsing="false" onAction="#onBtnLanguagesAction" prefHeight="36.0" prefWidth="128.0" text="Languages" toggleGroup="$viewMode">
-               <graphic>
-                  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../icon/language.png" />
-                     </image>
-                  </ImageView>
-               </graphic></ToggleButton>
-         </children>
-      </HBox>
-      <StackPane fx:id="stkMain">
-         <children>
-            <VBox visible="false">
-               <children>
-                  <Label text="Phrases" />
-               </children>
-            </VBox>
-            <VBox visible="false">
-               <children>
-                  <Label text="Languages" />
-               </children>
-            </VBox>
-         </children>
-      </StackPane>
+      </VBox>
    </children>
 </VBox>

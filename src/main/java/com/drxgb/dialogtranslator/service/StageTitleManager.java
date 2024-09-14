@@ -4,6 +4,9 @@ import javafx.stage.Stage;
 
 /**
  * Responsável por atualizar o título da janela.
+ * 
+ * @author Dr.XGB
+ * @version 1.0.0
  */
 public class StageTitleManager
 {

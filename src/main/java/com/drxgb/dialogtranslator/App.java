@@ -2,7 +2,10 @@ package com.drxgb.dialogtranslator;
 
 import java.io.IOException;
 
+import com.drxgb.dialogtranslator.controller.MainController;
+import com.drxgb.dialogtranslator.service.Container;
 import com.drxgb.dialogtranslator.service.StageTitleManager;
+import com.drxgb.dialogtranslator.service.ViewLoader;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -15,7 +18,7 @@ import javafx.stage.Stage;
  * Aplicação principal.
  * 
  * @author Dr.XGB
- * @version 1.0.0
+ * @version 2.0.0
  */
 public class App extends Application
 {
@@ -53,6 +56,16 @@ public class App extends Application
 	private StageTitleManager titleManager;
 	
 	/**
+	 * O carregador de telas.
+	 */
+	private ViewLoader viewLoader;
+	
+	/**
+	 * O conteiner de dados serializáveis da aplicação.
+	 */
+	private Container container;
+	
+	/**
 	 * Cena principal da aplicação.
 	 */
 	private Scene scene;
@@ -70,16 +83,19 @@ public class App extends Application
 	@Override
 	public void start(Stage stage) throws IOException
 	{
-		Image icon = new Image(getClass().getResourceAsStream("icon/app.png"));
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("view/MainView.fxml"));
-		Parent root = loader.load();
+		setup();
 		
-		instance = this;
-		titleManager = new StageTitleManager(stage, NAME);
+		Image icon = new Image(getClass().getResourceAsStream("icon/app.png"));
+		FXMLLoader loader = viewLoader.getFXMLLoader("MainView");
+		Parent root = loader.load();
+		MainController controller = loader.getController();
+		
 		scene = new Scene(root, 640, 480);
+		titleManager = new StageTitleManager(stage, NAME);
 		
 		stage.getIcons().add(icon);
 		stage.setScene(scene);
+		stage.setOnCloseRequest(ev -> controller.onCloseAction(ev));
 		stage.show();
 	}
 	
@@ -96,7 +112,7 @@ public class App extends Application
 	 * @param args Parâmetros de entrada da aplicação recebidos do terminal.
 	 */
 	public static void main(String[] args)
-	{
+	{		
 		launch();
 	}
 	
@@ -127,6 +143,28 @@ public class App extends Application
 	{
 		return titleManager;
 	}
+	
+	
+	/**
+	 * Recebe o carregdor de telas da aplicação.
+	 * 
+	 * @return O carregador de telas.
+	 */
+	public ViewLoader getViewLoader()
+	{
+		return viewLoader;
+	}
+	
+	
+	/**
+	 * Recebe o conteiner e dados serializáveis.
+	 * 
+	 * @return O conteiner.
+	 */
+	public Container getContainer()
+	{
+		return container;
+	}
 
 	
 	/**
@@ -148,5 +186,32 @@ public class App extends Application
 	public Stage getStage()
 	{
 		return (Stage)(getScene().getWindow());
+	}
+	
+	
+	/*
+	 * ===========================================================
+	 * 			*** MÉTODOS PRIVADOS ***
+	 * ===========================================================
+	 */
+	
+	/**
+	 * Configurações iniciais.
+	 */
+	private void setup()
+	{
+		instance = this;
+		viewLoader = new ViewLoader("view");
+		
+		setupContainer();
+	}
+	
+	
+	/**
+	 * Inicializa o conteiner.
+	 */
+	private void setupContainer()
+	{
+		container = new Container();
 	}
 }
