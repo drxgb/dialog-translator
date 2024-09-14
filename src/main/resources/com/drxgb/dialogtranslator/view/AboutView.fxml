@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" spacing="10.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.drxgb.dialogtranslator.controller.AboutController">
+   <children>
+      <VBox alignment="CENTER">
+         <children>
+            <ImageView fitHeight="156.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../img/drxgb.png" />
+               </image>
+            </ImageView>
+         </children>
+         <padding>
+            <Insets bottom="24.0" left="24.0" right="24.0" top="24.0" />
+         </padding>
+      </VBox>
+      <Separator orientation="VERTICAL" />
+      <BorderPane>
+         <top>
+            <VBox alignment="CENTER" BorderPane.alignment="CENTER">
+               <children>
+                  <Label fx:id="lblAppName">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblAppVersion">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblBuildInfo" />
+                  <Hyperlink onAction="#onLnkSiteAction" text="https://drxgb.com" />
+               </children>
+            </VBox>
+         </top>
+         <bottom>
+            <VBox alignment="CENTER" spacing="10.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label fx:id="lblCopyright" />
+                  <HBox alignment="BOTTOM_RIGHT">
+                     <children>
+                        <Button maxHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onBtnCloseAction" prefWidth="96.0" text="Close" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </bottom>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+      </BorderPane>
+   </children>
+</HBox>

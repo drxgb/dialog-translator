@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import com.drxgb.dialogtranslator.App;
 import com.drxgb.dialogtranslator.component.LanguagesPane;
 import com.drxgb.dialogtranslator.component.PhrasesPane;
 import com.drxgb.util.ValueHandler;
@@ -12,11 +13,15 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 /**
@@ -106,6 +111,32 @@ public class MainController implements Initializable
 	public void onMnitLanguagesAction()
 	{
 		btnLanguages.fire();
+	}
+	
+	
+	/**
+	 * Ação ao clicar no item do menu "About".
+	 * 
+	 * @throws IOException Quando o arquivo da tela não foi encontrado.
+	 */
+	@FXML
+	public void onMnitAboutAction() throws IOException
+	{
+		final App app = App.getInstance();
+		
+		Parent root = (Parent) app.getViewLoader().load("AboutView");
+		Scene scene = new Scene(root);
+		Stage stage = new Stage();
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("About ").append(App.NAME);
+		
+		stage.setTitle(sb.toString());
+		stage.setScene(scene);
+		stage.setResizable(false);
+		stage.initModality(Modality.APPLICATION_MODAL);
+		stage.initOwner(app.getStage());
+		stage.showAndWait();
 	}
 	
 	

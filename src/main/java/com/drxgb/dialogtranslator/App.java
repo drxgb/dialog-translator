@@ -38,6 +38,11 @@ public class App extends Application
 	 */
 	public static final String VERSION = "2.0.0";
 	
+	/**
+	 * O ano de lançamento da aplicação.
+	 */
+	public static final Integer RELEASE_YEAR = 2024;
+	
 	
 	/*
 	 * ===========================================================
