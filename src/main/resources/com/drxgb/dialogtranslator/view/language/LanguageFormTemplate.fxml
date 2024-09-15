@@ -10,18 +10,18 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<fx:root maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefWidth="320.0" spacing="10.0" type="VBox" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefWidth="320.0" spacing="10.0" stylesheets="@../../style/app.css" type="VBox" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <HBox spacing="8.0">
+      <HBox alignment="CENTER_LEFT" spacing="8.0">
          <children>
             <Label text="Language:" />
             <TextField fx:id="txtName" HBox.hgrow="ALWAYS" />
          </children>
       </HBox>
-      <CheckBox fx:id="chkMaster" mnemonicParsing="false" text="Set as Master language" />
+      <CheckBox fx:id="chkMaster" mnemonicParsing="false" selected="true" text="Set as Master language" />
       <HBox alignment="BOTTOM_RIGHT" spacing="8.0">
          <children>
-            <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onBtnCancelAction" prefWidth="80.0" text="Cancel">
+            <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onBtnCancelAction" prefWidth="80.0" styleClass="btn-secondary" text="Cancel">
                <graphic>
                   <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -29,7 +29,7 @@
                      </image>
                   </ImageView>
                </graphic></Button>
-            <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onBtnSaveAction" prefWidth="80.0" text="Save">
+            <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onBtnSaveAction" prefWidth="80.0" styleClass="btn-primary" text="Save">
                <graphic>
                   <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                      <image>

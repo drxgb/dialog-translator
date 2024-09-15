@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import com.drxgb.dialogtranslator.App;
 import com.drxgb.dialogtranslator.model.Language;
 import com.drxgb.dialogtranslator.util.FXRootInitializer;
 
@@ -118,8 +119,9 @@ public class LanguagesPane extends VBox implements Initializable
 	 */
 	private void openFormView(LanguageForm form, boolean isUpdate)
 	{
-		Scene formScene = new Scene(form);
+		Stage mainStage = App.getInstance().getStage();
 		Stage formStage = new Stage();
+		Scene formScene = new Scene(form);
 		StringBuilder sb = new StringBuilder();
 		
 		if (isUpdate)
@@ -132,9 +134,11 @@ public class LanguagesPane extends VBox implements Initializable
 		{
 			sb.append("New language");
 		}
-		
+
 		formStage.setTitle(sb.toString());
 		formStage.setScene(formScene);
+		formStage.getIcons().clear();
+		formStage.getIcons().addAll(mainStage.getIcons());
 		formStage.initOwner(this.getScene().getWindow());
 		formStage.initModality(Modality.APPLICATION_MODAL);
 		formStage.setResizable(false);

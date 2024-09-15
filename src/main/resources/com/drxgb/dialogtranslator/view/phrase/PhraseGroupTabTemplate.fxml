@@ -17,7 +17,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-
 <fx:root fitToHeight="true" fitToWidth="true" type="ScrollPane" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
    <content>
       <VBox maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" spacing="10.0">
@@ -28,7 +27,7 @@
                   <HBox spacing="8.0">
                      <children>
                         <TextField fx:id="txtGroupName" prefWidth="300.0" />
-                        <Button fx:id="btnRemoveGroup" mnemonicParsing="false">
+                        <Button fx:id="btnRemoveGroup" mnemonicParsing="false" styleClass="btn-remove">
                            <graphic>
                               <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -51,7 +50,7 @@
             </Separator>
             <HBox alignment="TOP_RIGHT">
                <children>
-                  <Button mnemonicParsing="false" onAction="#onBtnPhraseAction" prefHeight="36.0" prefWidth="128.0" text="New Phrase">
+                  <Button mnemonicParsing="false" onAction="#onBtnPhraseAction" prefHeight="36.0" prefWidth="128.0" styleClass="btn-primary" text="New Phrase">
                      <graphic>
                         <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                            <image>

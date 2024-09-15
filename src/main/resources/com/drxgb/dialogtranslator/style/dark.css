@@ -5,16 +5,6 @@
 }
 
 
-/*
- * ToolBar
- */
-.tool-bar, .menu-bar, .split-pane 
-{
-	-fx-background-color: rgb(24, 24, 24);
-	-fx-border-color: rgb(32, 32, 32);
-}
-
-
 .context-menu
 {
 	-fx-background-color: rgb(32, 32, 32);
@@ -28,21 +18,25 @@
 }
 
 
-.separator:vertical
+/*
+ * =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+ * 			Menu Bar
+ * =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+ */
+ 
+.menu-bar
 {
-	-fx-padding: 0 8px;
-}
-
-
-.separator:horizontal
-{
-	-fx-padding: 8px 0;
+	-fx-background-color: rgb(24, 24, 24);
+	-fx-border-color: rgb(32, 32, 32);
 }
 
 
 /*
- * Label
+ * =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+ * 			Label
+ * =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
  */
+
 .label
 {
 	-fx-text-fill: white;
@@ -50,56 +44,11 @@
 
 
 /*
- * Buttons
+ * =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+ * 			List View
+ * =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
  */
-.button, .toggle-button
- {
-	-fx-color: rgb(0, 127, 255);
-	-fx-text-fill: white;
-	-fx-border-color: rgb(0, 48, 192);
-	-fx-underline: false;
-	-fx-border-width: 2px;
-}
 
-
-.button:hover, .toggle-button:hover 
-{
-	-fx-color: rgb(0, 160, 255);
-}
-
-
-.toggle-button:selected, .button:pressed 
-{
-	-fx-color: rgb(0, 20, 160);
-}
-
-
-.btn-remove
-{
-	-fx-color: rgb(255, 80, 80);
-	-fx-text-fill: white;
-	-fx-border-color: rgb(192, 0, 0);
-	-fx-underline: false;
-	-fx-border-width: 2px;
-}
-
-
-.btn-remove:hover
-{
-	-fx-color: rgb(255, 20, 20);
-}
-
-
-.btn-remove:pressed
-{
-	-fx-color: rgb(192, 0, 0);	
-	-fx-border-color: rgb(255, 20, 20);
-}
-
-
-/*
- * Lists
- */
 .list-view
 {
 	-fx-background-color: rgb(32, 32, 32);
@@ -126,8 +75,18 @@
 
 
 /*
- * TextField TextArea
+ * =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+ * 			Text Field Text Area
+ * =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
  */
+
+.text-field
+{
+	-fx-border-color: rgb(64, 64, 64);
+	-fx-border-radius: 4px;
+}
+
+
 .text-field, .text-area .content
 {
 	-fx-background-color: rgb(40, 40, 40);
@@ -142,8 +101,31 @@
 
 
 /*
- * ScrollPane
+ * =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+ * 				Titled Pane
+ * =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
  */
+
+.titled-pane .content
+{
+	-fx-background-color: rgb(32, 32, 32);
+	-fx-border-color: rgb(64, 64, 64);
+}
+
+
+/*
+ * =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+ *			Scroll Pane
+ * =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+ */
+
+.scroll-pane
+{
+	-fx-background-color: rgb(64, 64, 64);
+}
+
+
+.scroll-pane > *,
 .scroll-bar
 {
 	-fx-background-color: rgb(32, 32, 32);
@@ -157,8 +139,29 @@
 
 
 /*
- * ComboBox
+ * =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+ * 				Split Pane
+ * =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
  */
+ 
+.split-pane
+{
+	-fx-background-color: rgb(32, 32,32);
+}
+
+
+.split-pane-divider
+{
+	-fx-color: rgb(48, 48, 48);
+}
+
+
+/*
+ * =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+ * 			Combo Box
+ * =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+ */
+
 .combo-box .list-cell:selected
 {
 	-fx-background-color: rgb(48, 48, 48);
@@ -178,11 +181,32 @@
 
 
 /*
- * TabPane
+ * =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+ * 				Check Box
+ * =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
  */
+ 
+.check-box
+{
+	-fx-text-fill: white;
+}
+
+
+/*
+ * =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+ * 			Tab Pane
+ * =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+ */
+
 .tab-header-background
 {
 	-fx-background-color: rgb(24, 24, 24);
+}
+
+
+.tab-content-area
+{
+	-fx-background-color: rgb(32, 32, 32);
 }
  
  

@@ -15,12 +15,25 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefWidth="640.0" spacing="10.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.drxgb.dialogtranslator.controller.MainController">
+<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefWidth="640.0" spacing="10.0" stylesheets="@../style/app.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.drxgb.dialogtranslator.controller.MainController">
    <children>
       <MenuBar>
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
+                  <MenuItem mnemonicParsing="false" text="New">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="N" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator>
+                     <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icon/new.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </MenuItem>
+                  <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem mnemonicParsing="false" text="Open">
                      <accelerator>
                         <KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
@@ -53,7 +66,7 @@
                      </accelerator>
                   </MenuItem>
                   <SeparatorMenuItem mnemonicParsing="false" />
-              <MenuItem mnemonicParsing="false" text="Close">
+              <MenuItem mnemonicParsing="false" onAction="#onMnitCloseAction" text="Close">
                      <accelerator>
                         <KeyCodeCombination alt="DOWN" code="F4" control="UP" meta="UP" shift="UP" shortcut="UP" />
                      </accelerator>
@@ -127,7 +140,7 @@
          <children>
             <HBox>
                <children>
-                  <ToggleButton fx:id="btnPhrases" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onBtnPhrasesAction" prefHeight="36.0" prefWidth="128.0" selected="true" text="Phrases">
+                  <ToggleButton fx:id="btnPhrases" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onBtnPhrasesAction" prefHeight="36.0" prefWidth="128.0" selected="true" styleClass="btn-primary" text="Phrases">
                      <toggleGroup>
                         <ToggleGroup fx:id="viewMode" />
                      </toggleGroup>
@@ -139,7 +152,7 @@
                         </ImageView>
                      </graphic>
                   </ToggleButton>
-                  <ToggleButton fx:id="btnLanguages" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onBtnLanguagesAction" prefHeight="36.0" prefWidth="128.0" text="Languages" toggleGroup="$viewMode">
+                  <ToggleButton fx:id="btnLanguages" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onBtnLanguagesAction" prefHeight="36.0" prefWidth="128.0" styleClass="btn-primary" text="Languages" toggleGroup="$viewMode">
                      <graphic>
                         <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                            <image>

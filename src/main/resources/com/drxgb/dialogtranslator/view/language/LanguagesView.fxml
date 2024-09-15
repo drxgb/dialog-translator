@@ -13,7 +13,7 @@
    <children>
       <HBox alignment="TOP_RIGHT">
          <children>
-            <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onBtnNewLanguageAction" prefHeight="36.0" prefWidth="160.0" text="New Language">
+            <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onBtnNewLanguageAction" prefHeight="36.0" prefWidth="160.0" styleClass="btn-primary" text="New Language">
                <graphic>
                   <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                      <image>

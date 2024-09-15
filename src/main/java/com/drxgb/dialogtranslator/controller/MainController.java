@@ -92,6 +92,16 @@ public class MainController implements Initializable
 	{
 		// TODO: Verificar arquivo não salvo.
 	}
+	
+	
+	/**
+	 * Ação ao clicar no item de menu "Close".
+	 */
+	@FXML
+	public void onMnitCloseAction()
+	{
+		App.getInstance().getStage().close();
+	}
 
 	
 	/**
@@ -127,15 +137,18 @@ public class MainController implements Initializable
 		Parent root = (Parent) app.getViewLoader().load("AboutView");
 		Scene scene = new Scene(root);
 		Stage stage = new Stage();
+		Stage mainStage = app.getStage();
 		StringBuilder sb = new StringBuilder();
 		
 		sb.append("About ").append(App.NAME);
 		
 		stage.setTitle(sb.toString());
 		stage.setScene(scene);
+		stage.getIcons().clear();
+		stage.getIcons().addAll(mainStage.getIcons());
 		stage.setResizable(false);
 		stage.initModality(Modality.APPLICATION_MODAL);
-		stage.initOwner(app.getStage());
+		stage.initOwner(mainStage);
 		stage.showAndWait();
 	}
 	

@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" spacing="10.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.drxgb.dialogtranslator.controller.AboutController">
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" spacing="10.0" stylesheets="@../style/app.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.drxgb.dialogtranslator.controller.AboutController">
    <children>
       <VBox alignment="CENTER">
          <children>
@@ -52,7 +52,14 @@
                   <Label fx:id="lblCopyright" />
                   <HBox alignment="BOTTOM_RIGHT">
                      <children>
-                        <Button maxHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onBtnCloseAction" prefWidth="96.0" text="Close" />
+                        <Button maxHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onBtnCloseAction" prefWidth="96.0" styleClass="btn-primary" text="Close">
+                           <graphic>
+                              <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icon/remove.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></Button>
                      </children>
                   </HBox>
                </children>

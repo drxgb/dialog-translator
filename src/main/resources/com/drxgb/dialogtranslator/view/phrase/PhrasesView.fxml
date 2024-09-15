@@ -12,7 +12,7 @@
    <children>
       <HBox alignment="TOP_RIGHT">
          <children>
-            <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onBtnAddPhraseGroupAction" prefHeight="36.0" prefWidth="160.0" text="Add phrase group">
+            <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onBtnAddPhraseGroupAction" prefHeight="36.0" prefWidth="160.0" styleClass="btn-primary" text="Add phrase group">
                <graphic>
                   <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                      <image>
