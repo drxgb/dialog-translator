@@ -12,6 +12,7 @@ import com.drxgb.dialogtranslator.util.FXRootInitializer;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.VBox;
@@ -123,6 +124,7 @@ public class LanguagesPane extends VBox implements Initializable
 		Stage formStage = new Stage();
 		Scene formScene = new Scene(form);
 		StringBuilder sb = new StringBuilder();
+		Parent root = mainStage.getScene().getRoot();
 		
 		if (isUpdate)
 		{
@@ -134,7 +136,8 @@ public class LanguagesPane extends VBox implements Initializable
 		{
 			sb.append("New language");
 		}
-
+		
+		form.getStylesheets().addAll(root.getStylesheets());
 		formStage.setTitle(sb.toString());
 		formStage.setScene(formScene);
 		formStage.getIcons().clear();

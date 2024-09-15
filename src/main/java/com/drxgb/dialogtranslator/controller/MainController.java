@@ -148,22 +148,23 @@ public class MainController implements Initializable
 	{
 		final App app = App.getInstance();
 		
-		Parent root = (Parent) app.getViewLoader().load("AboutView");
-		Scene scene = new Scene(root);
-		Stage stage = new Stage();
+		Parent aboutRoot = (Parent) app.getViewLoader().load("AboutView");
+		Scene aboutScene = new Scene(aboutRoot);
+		Stage aboutStage = new Stage();
 		Stage mainStage = app.getStage();
 		StringBuilder sb = new StringBuilder();
 		
 		sb.append("About ").append(App.NAME);
 		
-		stage.setTitle(sb.toString());
-		stage.setScene(scene);
-		stage.getIcons().clear();
-		stage.getIcons().addAll(mainStage.getIcons());
-		stage.setResizable(false);
-		stage.initModality(Modality.APPLICATION_MODAL);
-		stage.initOwner(mainStage);
-		stage.showAndWait();
+		aboutRoot.getStylesheets().addAll(root.getStylesheets());
+		aboutStage.setTitle(sb.toString());
+		aboutStage.setScene(aboutScene);
+		aboutStage.getIcons().clear();
+		aboutStage.getIcons().addAll(mainStage.getIcons());
+		aboutStage.setResizable(false);
+		aboutStage.initModality(Modality.APPLICATION_MODAL);
+		aboutStage.initOwner(mainStage);
+		aboutStage.showAndWait();
 	}
 	
 	
