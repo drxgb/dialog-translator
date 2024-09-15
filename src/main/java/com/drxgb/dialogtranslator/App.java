@@ -1,11 +1,17 @@
 package com.drxgb.dialogtranslator;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Properties;
 
 import com.drxgb.dialogtranslator.controller.MainController;
 import com.drxgb.dialogtranslator.service.Container;
 import com.drxgb.dialogtranslator.service.StageTitleManager;
+import com.drxgb.dialogtranslator.service.StyleManager;
 import com.drxgb.dialogtranslator.service.ViewLoader;
+import com.drxgb.util.PropertiesManager;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -43,6 +49,11 @@ public class App extends Application
 	 */
 	public static final Integer RELEASE_YEAR = 2024;
 	
+	/**
+	 * O nome do arquivo de configuração.
+	 */
+	public static final String SETTINGS_FILENAME = "settings.properties";
+	
 	
 	/*
 	 * ===========================================================
@@ -69,6 +80,16 @@ public class App extends Application
 	 * O conteiner de dados serializáveis da aplicação.
 	 */
 	private Container container;
+	
+	/**
+	 * O gerenciador de estilos da aplicação.
+	 */
+	private StyleManager styleManager;
+	
+	/**
+	 * O arquivo de configuração da aplicação.
+	 */
+	private Properties settings;
 	
 	/**
 	 * Cena principal da aplicação.
@@ -170,6 +191,33 @@ public class App extends Application
 	{
 		return container;
 	}
+	
+	
+	/**
+	 * Recebe o gerenciador de estilos.
+	 * 
+	 * @return O gerenciador de estilos.
+	 */
+	public StyleManager getStyleManager()
+	{
+		return styleManager;
+	}
+	
+	
+	/**
+	 * Recebe o arquivo de configuração da aplicação.
+	 * 
+	 * @return O arquivo de configuração.
+	 */
+	public Properties getSettings()
+	{
+		if (settings == null)
+		{
+			settings = PropertiesManager.load(new File(SETTINGS_FILENAME));
+		}
+		
+		return settings;
+	}
 
 	
 	/**
@@ -182,7 +230,7 @@ public class App extends Application
 		return scene;
 	}
 
-	
+
 	/**
 	 * Recebe a janela da aplicação.
 	 * 
@@ -190,7 +238,7 @@ public class App extends Application
 	 */
 	public Stage getStage()
 	{
-		return (Stage)(getScene().getWindow());
+		return (Stage) (getScene().getWindow());
 	}
 	
 	
@@ -202,13 +250,16 @@ public class App extends Application
 	
 	/**
 	 * Configurações iniciais.
+	 * 
+	 * @throws IOException Quando algum arquivo não é encontrado.
 	 */
-	private void setup()
+	private void setup() throws IOException
 	{
 		instance = this;
 		viewLoader = new ViewLoader("view");
 		
 		setupContainer();
+		setupStyles();	
 	}
 	
 	
@@ -218,5 +269,22 @@ public class App extends Application
 	private void setupContainer()
 	{
 		container = new Container();
+	}
+	
+	
+	/**
+	 * Inicializa os estilos.
+	 * 
+	 * @param root A raiz que terá seu estilo gerenciado.
+	 */
+	private void setupStyles()
+	{
+		List<String> styles = new LinkedList<>();
+		String basePath = "style";
+		
+		styles.add("Light");
+		styles.add("Dark");
+
+		styleManager = new StyleManager(styles, basePath);
 	}
 }

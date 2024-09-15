@@ -1,12 +1,17 @@
 package com.drxgb.dialogtranslator.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
+import java.util.Properties;
 import java.util.ResourceBundle;
 
 import com.drxgb.dialogtranslator.App;
 import com.drxgb.dialogtranslator.component.LanguagesPane;
 import com.drxgb.dialogtranslator.component.PhrasesPane;
+import com.drxgb.dialogtranslator.service.StyleManager;
+import com.drxgb.util.PropertiesManager;
 import com.drxgb.util.ValueHandler;
 
 import javafx.collections.ObservableList;
@@ -19,6 +24,8 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -37,6 +44,8 @@ public class MainController implements Initializable
 	 * 			*** ATRIBUTOS ***
 	 * ===========================================================
 	 */
+	
+	@FXML public Parent root;
 	
 	// Menu
 	@FXML public Menu mnuStyle;
@@ -68,6 +77,7 @@ public class MainController implements Initializable
 		try
 		{
 			initializeViewModes();		
+			initializeStyles();
 			initializeToggleButtons();
 		}
 		catch (IOException e)
@@ -90,7 +100,11 @@ public class MainController implements Initializable
 	 */
 	public void onCloseAction(WindowEvent ev)
 	{
+		final App app = App.getInstance();
+		Properties settings = app.getSettings();
+		
 		// TODO: Verificar arquivo não salvo.
+		PropertiesManager.save(new File(App.SETTINGS_FILENAME), settings);
 	}
 	
 	
@@ -200,6 +214,52 @@ public class MainController implements Initializable
 		});
 		
 		selectViewMode(0);
+	}
+	
+	
+	/**
+	 * Inicializa os estilos.
+	 */
+	private void initializeStyles()
+	{
+		final App app =  App.getInstance();
+		final StyleManager styleManager = app.getStyleManager();
+		final String STYLE_KEY = "style";
+		
+		List<String> availableStyles = styleManager.getAvailableStyles();
+		Properties settings = app.getSettings();
+		ToggleGroup group = new ToggleGroup();
+		
+		String style = settings.containsKey(STYLE_KEY)
+				? settings.getProperty(STYLE_KEY)
+				: availableStyles.getFirst();
+		
+		availableStyles.forEach(availableStyle ->
+		{
+			RadioMenuItem item = new RadioMenuItem(availableStyle);
+			StringBuilder sb = new StringBuilder();
+			Image icon;
+			
+			item.setOnAction(ev ->
+			{
+				styleManager.setStyle(availableStyle);
+				settings.setProperty(STYLE_KEY, availableStyle);
+			});
+			
+			sb.append("icon/style/")
+				.append(availableStyle.toLowerCase())
+				.append(".png");
+
+			icon = new Image(App.class.getResourceAsStream(sb.toString()));
+			
+			item.setGraphic(new ImageView(icon));
+			item.setToggleGroup(group);
+			item.setSelected(availableStyle.equals(style));
+			mnuStyle.getItems().add(item);
+		});
+		
+		styleManager.observeStyleList(root.getStylesheets());
+		styleManager.setStyle(style);
 	}
 	
 	
