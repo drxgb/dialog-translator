@@ -1,11 +1,14 @@
 package com.drxgb.dialogtranslator.component;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 import com.drxgb.dialogtranslator.model.Language;
 import com.drxgb.dialogtranslator.util.FXRootInitializer;
 
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
@@ -17,7 +20,7 @@ import javafx.stage.Stage;
  * @author Dr.XGB
  * @version 1.0.0
  */
-public class LanguageForm extends VBox
+public class LanguageForm extends VBox implements Initializable
 {
 	/*
 	 * ===========================================================
@@ -29,6 +32,7 @@ public class LanguageForm extends VBox
 	@FXML public CheckBox chkMaster;
 	
 	private Language language;
+	private boolean saved;
 	
 	
 	/*
@@ -49,6 +53,8 @@ public class LanguageForm extends VBox
 	public LanguageForm(Language language, boolean forceMaster) throws IOException
 	{
 		this.language = language;
+		this.saved = false;
+		
 		FXRootInitializer.init(this, "language/LanguageFormTemplate");
 		
 		if (forceMaster)
@@ -70,6 +76,23 @@ public class LanguageForm extends VBox
 	{
 		this(language, false);
 	}
+	
+	
+	/*
+	 * ===========================================================
+	 * 			*** MÉTODOS IMPLEMENTADOS ***
+	 * ===========================================================
+	 */
+
+	/**
+	 * @see javafx.fxml.Initializable#initialize(java.net.URL, java.util.ResourceBundle)
+	 */
+	@Override
+	public void initialize(URL location, ResourceBundle resources)
+	{
+		txtName.setText(language.getName());
+		chkMaster.setSelected(language.isMaster());
+	}
 
 	 
 	/*
@@ -77,13 +100,14 @@ public class LanguageForm extends VBox
 	 * 			*** AÇÕES DO CONTROLADOR ***
 	 * ===========================================================
 	 */
-	
+
 	/**
 	 * Ação ao clicar no botão "Cancel".
 	 */
 	@FXML
 	public void onBtnCancelAction()
 	{
+		saved = false;
 		closeWindow();
 	}
 	
@@ -96,6 +120,7 @@ public class LanguageForm extends VBox
 	{
 		language.setName(txtName.getText());
 		language.setMaster(chkMaster.isSelected());
+		saved = true;
 		closeWindow();
 	}
 	
@@ -114,6 +139,17 @@ public class LanguageForm extends VBox
 	public Language getLanguage()
 	{
 		return language;
+	}
+	
+	
+	/**
+	 * Verifica se o formulário foi salvo.
+	 * 
+	 * @return Se o formulário foi salvo.
+	 */
+	public boolean isSaved()
+	{
+		return saved;
 	}
 	
 	

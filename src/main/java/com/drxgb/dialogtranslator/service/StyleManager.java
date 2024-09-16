@@ -123,6 +123,17 @@ public class StyleManager
 	}
 	
 	
+	/**
+	 * Recebe os estilos que estão sendo observados pelo gerenciador.
+	 * 
+	 * @return A lista dos estilos observados.
+	 */
+	public List<String> getObservedStyleList()
+	{
+		return observedStyleList;
+	}
+	
+	
 	/*
 	 * ===========================================================
 	 * 			*** MÉTODOS PRIVADOS ***

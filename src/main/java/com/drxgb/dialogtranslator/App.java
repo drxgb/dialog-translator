@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Properties;
 
 import com.drxgb.dialogtranslator.controller.MainController;
@@ -138,7 +139,8 @@ public class App extends Application
 	 * @param args Parâmetros de entrada da aplicação recebidos do terminal.
 	 */
 	public static void main(String[] args)
-	{		
+	{
+		Locale.setDefault(Locale.US);
 		launch();
 	}
 	

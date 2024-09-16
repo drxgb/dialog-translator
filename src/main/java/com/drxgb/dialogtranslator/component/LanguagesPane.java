@@ -5,18 +5,16 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import com.drxgb.dialogtranslator.App;
 import com.drxgb.dialogtranslator.model.Language;
+import com.drxgb.dialogtranslator.scene.control.cell.LanguageCellFactory;
 import com.drxgb.dialogtranslator.util.FXRootInitializer;
+import com.drxgb.dialogtranslator.util.LanguageForms;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
@@ -35,6 +33,8 @@ public class LanguagesPane extends VBox implements Initializable
 	
 	@FXML public ListView<Language> lstLanguages;
 	
+	private List<Language> languages;
+	
 	
 	/*
 	 * ===========================================================
@@ -45,10 +45,12 @@ public class LanguagesPane extends VBox implements Initializable
 	/**
 	 * Cria o componente da lista de idiomas.
 	 * 
+	 * @param languages A lista de idiomas.
 	 * @throws IOException Quando o arquivo do componente não é encontrado.
 	 */
-	public LanguagesPane() throws IOException
+	public LanguagesPane(List<Language> languages) throws IOException
 	{
+		this.languages = languages;
 		FXRootInitializer.init(this, "language/LanguagesView");
 	}
 	
@@ -65,7 +67,8 @@ public class LanguagesPane extends VBox implements Initializable
 	@Override
 	public void initialize(URL location, ResourceBundle resources)
 	{
-		// TODO Inicialização da aba do grupo de frases
+		lstLanguages.setCellFactory(new LanguageCellFactory());
+		lstLanguages.setItems(FXCollections.observableArrayList(languages));
 	}
 	
 	
@@ -83,9 +86,21 @@ public class LanguagesPane extends VBox implements Initializable
 	@FXML
 	public void onBtnNewLanguageAction() throws IOException
 	{
-		LanguageForm form = new LanguageForm(new Language());
+		Stage formStage;
+		LanguageForm form;
+		Language language = new Language();
+		boolean forceMaster = lstLanguages.getItems().isEmpty();		
 		
-		openFormView(form, false);
+		form = new LanguageForm(language, forceMaster);
+		formStage = LanguageForms.makeEditorForm(form, this);
+		formStage.setTitle("New language");
+		formStage.showAndWait();
+		
+		if (form.isSaved())
+		{
+			lstLanguages.getItems().add(language);
+			LanguageForms.updateMasterLanguages(lstLanguages, language);
+		}
 	}
 	
 	
@@ -103,48 +118,5 @@ public class LanguagesPane extends VBox implements Initializable
 	public void setLanguages(List<Language> languages)
 	{
 		lstLanguages.setItems(FXCollections.observableList(languages));
-	}
-	
-	
-	/*
-	 * ===========================================================
-	 * 			*** MÉTODOS PRIVADOS ***
-	 * ===========================================================
-	 */
-	
-	/**
-	 * Abre a modal do formulário.
-	 * 
-	 * @param form A instância do formulário.
-	 * @param isUpdate Sinal se a instância está sendo alterada.
-	 */
-	private void openFormView(LanguageForm form, boolean isUpdate)
-	{
-		Stage mainStage = App.getInstance().getStage();
-		Stage formStage = new Stage();
-		Scene formScene = new Scene(form);
-		StringBuilder sb = new StringBuilder();
-		Parent root = mainStage.getScene().getRoot();
-		
-		if (isUpdate)
-		{
-			sb.append("Edit language")
-				.append(" - ")
-				.append(form.getLanguage().getName());
-		}
-		else
-		{
-			sb.append("New language");
-		}
-		
-		form.getStylesheets().addAll(root.getStylesheets());
-		formStage.setTitle(sb.toString());
-		formStage.setScene(formScene);
-		formStage.getIcons().clear();
-		formStage.getIcons().addAll(mainStage.getIcons());
-		formStage.initOwner(this.getScene().getWindow());
-		formStage.initModality(Modality.APPLICATION_MODAL);
-		formStage.setResizable(false);
-		formStage.showAndWait();
 	}
 }

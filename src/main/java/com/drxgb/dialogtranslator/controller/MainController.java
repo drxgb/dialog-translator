@@ -10,7 +10,9 @@ import java.util.ResourceBundle;
 import com.drxgb.dialogtranslator.App;
 import com.drxgb.dialogtranslator.component.LanguagesPane;
 import com.drxgb.dialogtranslator.component.PhrasesPane;
+import com.drxgb.dialogtranslator.service.Container;
 import com.drxgb.dialogtranslator.service.StyleManager;
+import com.drxgb.dialogtranslator.util.StyleDecorator;
 import com.drxgb.util.PropertiesManager;
 import com.drxgb.util.ValueHandler;
 
@@ -152,15 +154,16 @@ public class MainController implements Initializable
 		Scene aboutScene = new Scene(aboutRoot);
 		Stage aboutStage = new Stage();
 		Stage mainStage = app.getStage();
+		StyleDecorator<Parent> decorator = new StyleDecorator<>(aboutRoot);
 		StringBuilder sb = new StringBuilder();
 		
 		sb.append("About ").append(App.NAME);
 		
-		aboutRoot.getStylesheets().addAll(root.getStylesheets());
-		aboutStage.setTitle(sb.toString());
 		aboutStage.setScene(aboutScene);
-		aboutStage.getIcons().clear();
-		aboutStage.getIcons().addAll(mainStage.getIcons());
+		decorator.applyIcons(mainStage.getIcons());
+		decorator.applyStyleSheets(root.getStylesheets());
+		
+		aboutStage.setTitle(sb.toString());
 		aboutStage.setResizable(false);
 		aboutStage.initModality(Modality.APPLICATION_MODAL);
 		aboutStage.initOwner(mainStage);
@@ -203,9 +206,14 @@ public class MainController implements Initializable
 	 */
 	private void initializeViewModes() throws IOException
 	{
+		final App app = App.getInstance();
+		Container container = app.getContainer();
+		
 		viewModes = panMain.getChildren();
+
 		viewModes.add(new PhrasesPane());
-		viewModes.add(new LanguagesPane());
+		viewModes.add(new LanguagesPane(container.getLanguages()));
+
 		viewModes.forEach(v ->
 		{
 			AnchorPane.setTopAnchor(v, 0.0);
@@ -213,7 +221,7 @@ public class MainController implements Initializable
 			AnchorPane.setBottomAnchor(v, 0.0);
 			AnchorPane.setRightAnchor(v, 0.0);
 		});
-		
+
 		selectViewMode(0);
 	}
 	
