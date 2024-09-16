@@ -115,10 +115,10 @@ public class PhraseGroupPane extends ScrollPane implements Initializable
 	{
 		txtGroupName.setText(phraseGroup.getName());
 		txtGroupName.requestFocus();
-		txtGroupName.setOnKeyTyped(ev ->
+		txtGroupName.textProperty().addListener((obs, oldVal, newVal) ->
 		{
-			tab.setText(txtGroupName.getText());
-			phraseGroup.setName(txtGroupName.getText());
+			tab.setText(newVal);
+			phraseGroup.setName(newVal);
 		});
 	}
 	

@@ -10,6 +10,7 @@ import com.drxgb.dialogtranslator.util.FXRootInitializer;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -29,6 +30,7 @@ public class LanguageForm extends VBox implements Initializable
 	 */
 	
 	@FXML public TextField txtName;
+	@FXML public Label lblError;
 	@FXML public CheckBox chkMaster;
 	
 	private Language language;
@@ -90,8 +92,16 @@ public class LanguageForm extends VBox implements Initializable
 	@Override
 	public void initialize(URL location, ResourceBundle resources)
 	{
-		txtName.setText(language.getName());
 		chkMaster.setSelected(language.isMaster());
+		txtName.setText(language.getName());
+		txtName.textProperty().addListener((obs, oldVal, newVal) ->
+		{
+			if (! newVal.isBlank())
+			{
+				txtName.getStyleClass().remove("error");
+				lblError.setVisible(false);
+			}
+		});
 	}
 
 	 
@@ -118,10 +128,19 @@ public class LanguageForm extends VBox implements Initializable
 	@FXML
 	public void onBtnSaveAction()
 	{
-		language.setName(txtName.getText());
-		language.setMaster(chkMaster.isSelected());
-		saved = true;
-		closeWindow();
+		if (validated())
+		{
+			language.setName(txtName.getText());
+			language.setMaster(chkMaster.isSelected());
+			saved = true;
+			closeWindow();
+		}
+		else
+		{
+			txtName.getStyleClass().add("error");
+			lblError.setText("This field cannot be empty.");
+			lblError.setVisible(true);
+		}
 	}
 	
 	
@@ -176,5 +195,16 @@ public class LanguageForm extends VBox implements Initializable
 	private void closeWindow()
 	{
 		((Stage) this.getScene().getWindow()).close();		
+	}
+	
+	
+	/**
+	 * Verifica se os campos são válidos.
+	 * 
+	 * @return A validação do formulário.
+	 */
+	private boolean validated()
+	{
+		return ! txtName.getText().isBlank();
 	}
 }
