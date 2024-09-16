@@ -10,9 +10,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.VBox;
+import javafx.util.Callback;
 
 /**
- * Controlador da tela de frases.
+ * Componente da tela de frases.
  * 
  * @author Dr.XGB
  * @version 1.0.0
@@ -57,19 +58,17 @@ public class PhrasesPane extends VBox
 		Tab tab;
 		PhraseGroup group;
 		PhraseGroupPane root;
-		StringBuilder sb = new StringBuilder();
 		ObservableList<Tab> tabs = panGroups.getTabs();
-		final int LEN = tabs.size();
 		
-		sb.append("Group ").append(LEN + 1);
-		group = new PhraseGroup(sb.toString());
-		root = new PhraseGroupPane(group);
-		tab = new Tab(group.getName(), root);
+		group = new PhraseGroup(makeFallbackName());
+		tab = new Tab(group.getName());
+		root = new PhraseGroupPane(group, tab);
 		
+		tab.setContent(root);
 		tabs.add(tab);
 		panGroups.getSelectionModel().select(tab);
 	}
-
+	
 	
 	/*
 	 * ===========================================================
@@ -77,5 +76,31 @@ public class PhrasesPane extends VBox
 	 * ===========================================================
 	 */
 	
-	
+	/**
+	 * Cria um nome genérico para a aba.
+	 * 
+	 * @return O nome da aba.
+	 */
+	private String makeFallbackName()
+	{
+		Callback<Integer, String> updateName = i -> {
+			StringBuilder sb = new StringBuilder();
+			
+			sb.append("Group ").append(i);
+			return sb.toString();
+		};
+
+		int index = 1;
+		String name = updateName.call(index);
+		
+		for (Tab tab : panGroups.getTabs())
+		{			
+			if (tab.getText().equals(name))
+			{
+				name = updateName.call(++index);
+			}
+		}
+		
+		return name;
+	}
 }

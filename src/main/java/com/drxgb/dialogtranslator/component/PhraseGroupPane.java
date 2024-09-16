@@ -2,19 +2,23 @@ package com.drxgb.dialogtranslator.component;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import com.drxgb.dialogtranslator.model.Language;
 import com.drxgb.dialogtranslator.model.Phrase;
 import com.drxgb.dialogtranslator.model.PhraseGroup;
+import com.drxgb.dialogtranslator.util.Alerts;
 import com.drxgb.dialogtranslator.util.FXRootInitializer;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
@@ -40,6 +44,7 @@ public class PhraseGroupPane extends ScrollPane implements Initializable
 	@FXML public ListView<Phrase> lstPhrases;
 	
 	private PhraseGroup phraseGroup;
+	private Tab tab;
 	
 	/*
 	 * ===========================================================
@@ -51,12 +56,15 @@ public class PhraseGroupPane extends ScrollPane implements Initializable
 	 * Cria o componente da aba do grupo de frases.
 	 * 
 	 * @param phraseGroup O grupo de frases.
+	 * @param tab A aba que contém o grupo de frases.
 	 * 
 	 * @throws IOException Quando o arquivo do modelo não foi encontrado.
 	 */
-	public PhraseGroupPane(PhraseGroup phraseGroup) throws IOException
+	public PhraseGroupPane(PhraseGroup phraseGroup, Tab tab) throws IOException
 	{
 		this.phraseGroup = phraseGroup;
+		this.tab = tab;
+
 		FXRootInitializer.init(this, "phrase/PhraseGroupTabTemplate");
 	}
 	
@@ -73,7 +81,8 @@ public class PhraseGroupPane extends ScrollPane implements Initializable
 	@Override
 	public void initialize(URL location, ResourceBundle resources)
 	{
-		// TODO Inicialização da aba do grupo de frases
+		setupGroupNameTextField();
+		setupRemoveGroupButton();
 	}
 	
 	
@@ -98,4 +107,35 @@ public class PhraseGroupPane extends ScrollPane implements Initializable
 	 * 			*** MÉTODOS PRIVADOS ***
 	 * ===========================================================
 	 */
+	
+	/**
+	 * Inicializa o campo de texto do nome do grupo.
+	 */
+	private void setupGroupNameTextField()
+	{
+		txtGroupName.setText(phraseGroup.getName());
+		txtGroupName.requestFocus();
+		txtGroupName.setOnKeyTyped(ev ->
+		{
+			tab.setText(txtGroupName.getText());
+			phraseGroup.setName(txtGroupName.getText());
+		});
+	}
+	
+	
+	/**
+	 * Inicializa o botão de remover grupo de frases.
+	 */
+	private void setupRemoveGroupButton()
+	{
+		btnRemoveGroup.setOnAction(ev ->
+		{
+			Optional<ButtonType> option = Alerts.deletionAlertResult("phrase group", phraseGroup.getName());
+			
+			if (option.get() == ButtonType.YES)
+			{
+				tab.getTabPane().getTabs().remove(tab);
+			}
+		});
+	}
 }
