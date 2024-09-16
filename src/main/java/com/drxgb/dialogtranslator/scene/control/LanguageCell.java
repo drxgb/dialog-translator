@@ -3,19 +3,14 @@ package com.drxgb.dialogtranslator.scene.control;
 import java.io.IOException;
 import java.util.Optional;
 
-import com.drxgb.dialogtranslator.App;
 import com.drxgb.dialogtranslator.component.LanguageForm;
 import com.drxgb.dialogtranslator.model.Language;
-import com.drxgb.dialogtranslator.service.StyleManager;
-import com.drxgb.dialogtranslator.util.DialogStyleDecorator;
+import com.drxgb.dialogtranslator.util.Alerts;
 import com.drxgb.dialogtranslator.util.LanguageForms;
 
 import javafx.scene.Parent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.DialogPane;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.text.Font;
@@ -96,39 +91,13 @@ public class LanguageCell extends ListCell<Language>
 	 */
 	protected Button makeRemoveButton(Language language)
 	{
-		final App app = App.getInstance();
 		final ListView<Language> list = getListView();
 		Button btnRemove = new Button("X");
 		
 		btnRemove.getStyleClass().add("btn-cell-remove");
 		btnRemove.setOnAction(ev ->
 		{
-			Alert alert = new Alert(
-					AlertType.WARNING,
-					"This action is irreversible.",
-					ButtonType.YES, ButtonType.NO
-			);
-			DialogPane dialog = alert.getDialogPane();
-			DialogStyleDecorator decorator = new DialogStyleDecorator(dialog);
-			StringBuilder title = new StringBuilder();
-			StringBuilder header = new StringBuilder();
-			Stage mainStage = app.getStage();
-			StyleManager styleManager = app.getStyleManager();
-			Optional<ButtonType> option;
-			
-			title.append("Remove language - ").append(language.getName());
-			header.append("Are you sure you want remove \"")
-				.append(language.getName())
-				.append("\"?");
-			
-			alert.setTitle(title.toString());
-			alert.setHeaderText(header.toString());
-			
-			decorator.applyIcons(mainStage.getIcons());
-			decorator.applyStyleSheets(styleManager.getObservedStyleList());
-			decorator.applyButtonStyleClass("btn-primary");
-			
-			option = alert.showAndWait();
+			Optional<ButtonType> option = Alerts.deletionAlertResult("language", language.getName());
 			
 			if (option.get() == ButtonType.YES)
 			{
