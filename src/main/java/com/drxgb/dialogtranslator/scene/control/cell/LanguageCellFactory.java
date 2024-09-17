@@ -1,7 +1,6 @@
 package com.drxgb.dialogtranslator.scene.control.cell;
 
 import com.drxgb.dialogtranslator.model.Language;
-import com.drxgb.dialogtranslator.scene.control.LanguageCell;
 
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;

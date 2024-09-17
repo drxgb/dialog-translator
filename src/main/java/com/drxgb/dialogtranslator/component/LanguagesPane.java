@@ -2,7 +2,6 @@ package com.drxgb.dialogtranslator.component;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import com.drxgb.dialogtranslator.model.Language;
@@ -10,7 +9,7 @@ import com.drxgb.dialogtranslator.scene.control.cell.LanguageCellFactory;
 import com.drxgb.dialogtranslator.util.FXRootInitializer;
 import com.drxgb.dialogtranslator.util.LanguageForms;
 
-import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
@@ -33,7 +32,7 @@ public class LanguagesPane extends VBox implements Initializable
 	
 	@FXML public ListView<Language> lstLanguages;
 	
-	private List<Language> languages;
+	private ObservableList<Language> languages;
 	
 	
 	/*
@@ -48,7 +47,7 @@ public class LanguagesPane extends VBox implements Initializable
 	 * @param languages A lista de idiomas.
 	 * @throws IOException Quando o arquivo do componente não é encontrado.
 	 */
-	public LanguagesPane(List<Language> languages) throws IOException
+	public LanguagesPane(ObservableList<Language> languages) throws IOException
 	{
 		this.languages = languages;
 		FXRootInitializer.init(this, "language/LanguagesView");
@@ -68,7 +67,7 @@ public class LanguagesPane extends VBox implements Initializable
 	public void initialize(URL location, ResourceBundle resources)
 	{
 		lstLanguages.setCellFactory(new LanguageCellFactory());
-		lstLanguages.setItems(FXCollections.observableArrayList(languages));
+		lstLanguages.setItems(languages);
 	}
 	
 	
@@ -115,8 +114,8 @@ public class LanguagesPane extends VBox implements Initializable
 	 * 
 	 * @param languages A nova lista de idiomas.
 	 */
-	public void setLanguages(List<Language> languages)
+	public void setLanguages(ObservableList<Language> languages)
 	{
-		lstLanguages.setItems(FXCollections.observableList(languages));
+		lstLanguages.setItems(languages);
 	}
 }

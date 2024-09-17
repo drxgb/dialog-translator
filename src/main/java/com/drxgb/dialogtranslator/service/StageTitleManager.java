@@ -55,7 +55,7 @@ public class StageTitleManager
 	{
 		this.stage = stage;
 		this.baseTitle = baseTitle;
-		this.title = DEFAULT_TITLE;
+		this.title = "";
 		this.unsaved = false;
 		
 		updateTitle();
@@ -83,22 +83,16 @@ public class StageTitleManager
 	 */
 	public void updateTitle()
 	{
-		stage.setTitle(getTitle());
+		stage.setTitle(getFullTitle());
 	}
 
 
-	/*
-	 * ===========================================================
-	 * 			*** GETTERS E SETTERS ***
-	 * ===========================================================
-	 */
-
 	/**
-	 * Recebe o título.
+	 * Recebe o título completo da janela.
 	 * 
 	 * @return O título completo.
 	 */
-	public String getTitle()
+	public String getFullTitle()
 	{
 		StringBuilder sb = new StringBuilder();
 		
@@ -107,7 +101,7 @@ public class StageTitleManager
 			sb.append('*');
 		}
 		
-		sb.append(title)
+		sb.append(getTitle())
 			.append(" - ")
 			.append(baseTitle);
 		
@@ -116,17 +110,40 @@ public class StageTitleManager
 	
 	
 	/**
+	 * Verifica se a janela possui um título para o nome do arquivo.
+	 * 
+	 * @return Se possui título ou não.
+	 */
+	public boolean isUntitled()
+	{
+		return title == null || title.isEmpty();
+	}
+	
+
+	/*
+	 * ===========================================================
+	 * 			*** GETTERS E SETTERS ***
+	 * ===========================================================
+	 */
+
+	/**
+	 * Recebe o título somente com o nome do arquivo.
+	 * 
+	 * @return O título.
+	 */
+	public String getTitle()
+	{
+		return isUntitled() ? DEFAULT_TITLE : title;
+	}
+	
+
+	/**
 	 * Modifica o título da janela.
 	 * 
 	 * @param title O novo título da janela.
 	 */
 	public void setTitle(String title)
-	{
-		if (title == null || title.isBlank())
-		{
-			title = DEFAULT_TITLE;
-		}
-		
+	{		
 		this.title = title;
 		updateTitle();
 	}

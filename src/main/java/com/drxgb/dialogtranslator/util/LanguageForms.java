@@ -71,4 +71,27 @@ public abstract class LanguageForms
 			listView.refresh();
 		}
 	}
+	
+	
+	/**
+	 * Verifica se há algum idioma principal na lista de idiomas.
+	 * Caso não encontre nenhum idioma principal, será definido como
+	 * tal o primeiro idioma da lista.
+	 * 
+	 * @param listView A lista de idiomas.
+	 */
+	public static void checkIfHasMasterLanguages(ListView<Language> listView)
+	{
+		boolean hasMaster = listView.getItems()
+				.stream()
+				.filter(lang -> lang.isMaster())
+				.findFirst()
+				.isPresent();
+		
+		if (! hasMaster)
+		{
+			listView.getItems().getFirst().setMaster(true);
+			listView.refresh();
+		}
+	}
 }

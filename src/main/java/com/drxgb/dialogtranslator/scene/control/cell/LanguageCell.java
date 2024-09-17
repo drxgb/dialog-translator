@@ -1,10 +1,12 @@
-package com.drxgb.dialogtranslator.scene.control;
+package com.drxgb.dialogtranslator.scene.control.cell;
 
 import java.io.IOException;
 import java.util.Optional;
 
+import com.drxgb.dialogtranslator.App;
 import com.drxgb.dialogtranslator.component.LanguageForm;
 import com.drxgb.dialogtranslator.model.Language;
+import com.drxgb.dialogtranslator.scene.control.RemoveCellButton;
 import com.drxgb.dialogtranslator.util.Alerts;
 import com.drxgb.dialogtranslator.util.LanguageForms;
 
@@ -13,8 +15,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
+import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
 
 /**
@@ -58,20 +59,25 @@ public class LanguageCell extends ListCell<Language>
 			{
 				try
 				{
-					Stage formStage;
-					Parent root = getScene().getRoot();
-					LanguageForm form = new LanguageForm(language);
-					StringBuilder sb = new StringBuilder();
-					
-					sb.append("Edit language - ").append(language.getName());
-					
-					formStage = LanguageForms.makeEditorForm(form, root);
-					formStage.setTitle(sb.toString());
-					formStage.showAndWait();
-					
-					if (form.isSaved())
+					if (ev.getButton().equals(MouseButton.PRIMARY) && ev.getClickCount() == 2)
 					{
-						LanguageForms.updateMasterLanguages(getListView(), language);
+						final boolean FORCE_MASTER = getListView().getItems().size() == 1;
+						
+						Stage formStage;
+						Parent root = getScene().getRoot();
+						LanguageForm form = new LanguageForm(language, FORCE_MASTER);
+						StringBuilder sb = new StringBuilder();
+
+						sb.append("Edit language - ").append(language.getName());
+						
+						formStage = LanguageForms.makeEditorForm(form, root);
+						formStage.setTitle(sb.toString());
+						formStage.showAndWait();
+
+						if (form.isSaved())
+						{
+							LanguageForms.updateMasterLanguages(getListView(), language);
+						}						
 					}
 				}
 				catch (IOException e)
@@ -83,18 +89,23 @@ public class LanguageCell extends ListCell<Language>
 	}
 	
 	
+	/*
+	 * ===========================================================
+	 * 			*** MÉTODOS PRIVADOS ***
+	 * ===========================================================
+	 */	
+	
 	/**
 	 * Cria o botão de remover o idioma.
 	 * 
 	 * @param language O idioma a ser removido.
 	 * @return O botão.
 	 */
-	protected Button makeRemoveButton(Language language)
+	private Button makeRemoveButton(Language language)
 	{
 		final ListView<Language> list = getListView();
-		Button btnRemove = new Button("X");
-		
-		btnRemove.getStyleClass().add("btn-cell-remove");
+		Button btnRemove = new RemoveCellButton();
+
 		btnRemove.setOnAction(ev ->
 		{
 			Optional<ButtonType> option = Alerts.deletionAlertResult("language", language.getName());
@@ -102,24 +113,12 @@ public class LanguageCell extends ListCell<Language>
 			if (option.get() == ButtonType.YES)
 			{
 				list.getItems().remove(language);
+				App.getInstance().getFileManager().setUnsavedChanges(true);
+				LanguageForms.checkIfHasMasterLanguages(list);
 				setOnMouseClicked(null);
 			}
 		});
 		
 		return btnRemove;
-	}
-	
-	
-	/**
-	 * Cria a fonte para o idioma principal.
-	 * 
-	 * @return A fonte.
-	 */
-	protected Font makeMasterFont()
-	{
-		String family = getFont().getFamily();
-		double size = getFont().getSize();
-		
-		return Font.font(family, FontWeight.BOLD, size);
 	}
 }

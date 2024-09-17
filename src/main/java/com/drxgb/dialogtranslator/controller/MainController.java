@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
@@ -12,17 +13,23 @@ import com.drxgb.dialogtranslator.component.LanguagesPane;
 import com.drxgb.dialogtranslator.component.PhrasesPane;
 import com.drxgb.dialogtranslator.service.Container;
 import com.drxgb.dialogtranslator.service.StyleManager;
+import com.drxgb.dialogtranslator.util.DialogStyleDecorator;
 import com.drxgb.dialogtranslator.util.StyleDecorator;
 import com.drxgb.util.PropertiesManager;
 import com.drxgb.util.ValueHandler;
 
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
@@ -51,6 +58,7 @@ public class MainController implements Initializable
 	
 	// Menu
 	@FXML public Menu mnuStyle;
+	@FXML public MenuItem mnitSave;
 	@FXML public RadioMenuItem mnitPhrases;
 	@FXML public RadioMenuItem mnitLanguages;
 	
@@ -62,6 +70,15 @@ public class MainController implements Initializable
 	
 	// Telas internas
 	private ObservableList<Node> viewModes;
+	
+	
+	/*
+	 * ===========================================================
+	 * 			*** ASSOCIAÇÕES ***
+	 * ===========================================================
+	 */
+	
+	private final App app = App.getInstance();
 
 	
 	/*
@@ -80,7 +97,9 @@ public class MainController implements Initializable
 		{
 			initializeViewModes();		
 			initializeStyles();
-			initializeToggleButtons();
+			initializeViewModeMenuItems();
+			
+			App.getInstance().getFileManager().setSaveMenuItem(mnitSave);
 		}
 		catch (IOException e)
 		{
@@ -102,11 +121,89 @@ public class MainController implements Initializable
 	 */
 	public void onCloseAction(WindowEvent ev)
 	{
-		final App app = App.getInstance();
+		final App app = App.getInstance();		
 		Properties settings = app.getSettings();
 		
-		// TODO: Verificar arquivo não salvo.
+		if (app.getFileManager().hasUnsavedChanges())
+		{			
+			ButtonType confirmation = saveConfirmationAlert().get();
+			
+			if (confirmation == ButtonType.CANCEL)
+			{
+				ev.consume();
+				return;
+			}
+		}
+
 		PropertiesManager.save(new File(App.SETTINGS_FILENAME), settings);
+	}
+	
+	
+	/**
+	 * Ação ao clicar no item de menu "New".
+	 */
+	@FXML
+	public void onMnitNewAction()
+	{
+		final App app = App.getInstance();		
+		
+		if (app.getFileManager().hasUnsavedChanges())
+		{			
+			ButtonType confirmation = saveConfirmationAlert().get();
+			
+			if (confirmation == ButtonType.CANCEL)
+			{
+				return;
+			}
+		}
+		
+		// TODO Novo arquivo.
+	}
+	
+	
+	/**
+	 * Ação ao clicar no item de menu "Open".
+	 */
+	@FXML
+	public void onMnitOpenAction()
+	{		
+		if (app.getFileManager().hasUnsavedChanges())
+		{			
+			ButtonType confirmation = saveConfirmationAlert().get();
+			
+			if (confirmation == ButtonType.CANCEL)
+			{
+				return;
+			}
+		}
+
+		// TODO Abrir arquivo.
+	}
+	
+	
+	/**
+	 * Ação ao clicar no item de menu "Save".
+	 */
+	@FXML
+	public void onMnitSaveAction()
+	{		
+		if (app.getTitleManager().isUntitled())
+		{
+			onMnitSaveAsAction();
+			return;
+		}
+		
+		// TODO Salvar arquivo.
+	}
+	
+	
+	/**
+	 * Ação ao clicar no item de menu "Save As...".
+	 */
+	@FXML
+	public void onMnitSaveAsAction()
+	{
+		// TODO Salvar arquivo como...
 	}
 	
 	
@@ -114,9 +211,17 @@ public class MainController implements Initializable
 	 * Ação ao clicar no item de menu "Close".
 	 */
 	@FXML
-	public void onMnitCloseAction()
+	public void onMnitCloseAction(ActionEvent ev)
 	{
-		App.getInstance().getStage().close();
+		Stage stage = App.getInstance().getStage();
+		WindowEvent wndEv = new WindowEvent(stage, ev.getEventType());
+		
+		stage.getOnCloseRequest().handle(wndEv);
+		
+		if (! wndEv.isConsumed())
+		{
+			stage.close();
+		}
 	}
 
 	
@@ -147,9 +252,7 @@ public class MainController implements Initializable
 	 */
 	@FXML
 	public void onMnitAboutAction() throws IOException
-	{
-		final App app = App.getInstance();
-		
+	{		
 		Parent aboutRoot = (Parent) app.getViewLoader().load("AboutView");
 		Scene aboutScene = new Scene(aboutRoot);
 		Stage aboutStage = new Stage();
@@ -206,7 +309,6 @@ public class MainController implements Initializable
 	 */
 	private void initializeViewModes() throws IOException
 	{
-		final App app = App.getInstance();
 		Container container = app.getContainer();
 		
 		viewModes = panMain.getChildren();
@@ -275,7 +377,7 @@ public class MainController implements Initializable
 	/**
 	 * Inicializa os botões alternados dos modos de visualização.
 	 */
-	private void initializeToggleButtons()
+	private void initializeViewModeMenuItems()
 	{
 		viewMode.selectedToggleProperty().addListener((obs, oldVal, newVal) ->
 		{
@@ -300,5 +402,42 @@ public class MainController implements Initializable
 			viewModes.forEach(v -> v.setVisible(false));
 			viewModes.get(index).setVisible(true);
 		}
+	}
+	
+	
+	/**
+	 * Cria um alerta de confirmação de salvamento do arquivo e entrega
+	 * o resultado da decisão tomada pelo usuário.
+	 * 
+	 * @return O resultado da decisão tomada pelo usuário.
+	 */
+	private Optional<ButtonType> saveConfirmationAlert()
+	{		
+		Alert alert = new Alert(AlertType.WARNING, "", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+		DialogStyleDecorator decorator = new DialogStyleDecorator(alert.getDialogPane());
+		StringBuilder sb = new StringBuilder();
+		Optional<ButtonType> option;
+		
+		sb.append("Save changes to \"")
+			.append(app.getTitleManager().getTitle())
+			.append("\"?");
+		
+		alert.setTitle("Save file");
+		alert.setHeaderText(null);
+		alert.setContentText(sb.toString());
+		alert.initOwner(app.getStage());
+		alert.initModality(Modality.APPLICATION_MODAL);
+		
+		decorator.applyStyleSheets(app.getStage().getScene().getRoot().getStylesheets());
+		decorator.applyButtonStyleClass("btn-primary");
+		
+		option = alert.showAndWait();		
+		
+		if (option.get() == ButtonType.YES)
+		{
+			onMnitSaveAction();
+		}
+		
+		return option;
 	}
 }

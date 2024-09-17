@@ -9,6 +9,7 @@ import java.util.Properties;
 
 import com.drxgb.dialogtranslator.controller.MainController;
 import com.drxgb.dialogtranslator.service.Container;
+import com.drxgb.dialogtranslator.service.FileManager;
 import com.drxgb.dialogtranslator.service.StageTitleManager;
 import com.drxgb.dialogtranslator.service.StyleManager;
 import com.drxgb.dialogtranslator.service.ViewLoader;
@@ -73,6 +74,16 @@ public class App extends Application
 	private StageTitleManager titleManager;
 	
 	/**
+	 * O gerenciador de estilos da aplicação.
+	 */
+	private StyleManager styleManager;
+	
+	/**
+	 * O gerenciador de arquivos da aplicação.
+	 */
+	private FileManager fileManager;
+
+	/**
 	 * O carregador de telas.
 	 */
 	private ViewLoader viewLoader;
@@ -81,11 +92,6 @@ public class App extends Application
 	 * O conteiner de dados serializáveis da aplicação.
 	 */
 	private Container container;
-	
-	/**
-	 * O gerenciador de estilos da aplicação.
-	 */
-	private StyleManager styleManager;
 	
 	/**
 	 * O arquivo de configuração da aplicação.
@@ -110,7 +116,7 @@ public class App extends Application
 	@Override
 	public void start(Stage stage) throws IOException
 	{
-		setup();
+		setup(stage);
 		
 		Image icon = new Image(getClass().getResourceAsStream("icon/app.png"));
 		FXMLLoader loader = viewLoader.getFXMLLoader("MainView");
@@ -118,7 +124,6 @@ public class App extends Application
 		MainController controller = loader.getController();
 		
 		scene = new Scene(root, 640, 480);
-		titleManager = new StageTitleManager(stage, NAME);
 		
 		stage.getIcons().add(icon);
 		stage.setScene(scene);
@@ -174,6 +179,28 @@ public class App extends Application
 	
 	
 	/**
+	 * Recebe o gerenciador de estilos.
+	 * 
+	 * @return O gerenciador de estilos.
+	 */
+	public StyleManager getStyleManager()
+	{
+		return styleManager;
+	}
+	
+	
+	/**
+	 * Recebe o gerenciador de arquivos.
+	 * 
+	 * @return O gerenciador de arquivos.
+	 */
+	public FileManager getFileManager()
+	{
+		return fileManager;
+	}
+
+
+	/**
 	 * Recebe o carregdor de telas da aplicação.
 	 * 
 	 * @return O carregador de telas.
@@ -192,17 +219,6 @@ public class App extends Application
 	public Container getContainer()
 	{
 		return container;
-	}
-	
-	
-	/**
-	 * Recebe o gerenciador de estilos.
-	 * 
-	 * @return O gerenciador de estilos.
-	 */
-	public StyleManager getStyleManager()
-	{
-		return styleManager;
 	}
 	
 	
@@ -253,24 +269,20 @@ public class App extends Application
 	/**
 	 * Configurações iniciais.
 	 * 
+	 * @param stage A janela da aplicação.
+	 * 
 	 * @throws IOException Quando algum arquivo não é encontrado.
 	 */
-	private void setup() throws IOException
+	private void setup(Stage stage) throws IOException
 	{
 		instance = this;
-		viewLoader = new ViewLoader("view");
-		
-		setupContainer();
-		setupStyles();	
-	}
-	
-	
-	/**
-	 * Inicializa o conteiner.
-	 */
-	private void setupContainer()
-	{
+
 		container = new Container();
+		viewLoader = new ViewLoader("view");
+		titleManager = new StageTitleManager(stage, NAME);
+		fileManager = new FileManager(this);
+		
+		setupStyles();
 	}
 	
 	

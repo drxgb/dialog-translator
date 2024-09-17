@@ -1,10 +1,10 @@
 package com.drxgb.dialogtranslator.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.drxgb.dialogtranslator.model.Language;
 import com.drxgb.dialogtranslator.model.PhraseGroup;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  * Representa o conjunto de dados que serão serializados.
@@ -20,8 +20,8 @@ public class Container
 	 * ===========================================================
 	 */
 	
-	private List<PhraseGroup> groups;
-	private List<Language> languages;
+	private ObservableList<PhraseGroup> groups;
+	private ObservableList<Language> languages;
 	
 	
 	/*
@@ -35,8 +35,8 @@ public class Container
 	 */
 	public Container()
 	{
-		groups = new ArrayList<>();
-		languages = new ArrayList<>();
+		groups = FXCollections.observableArrayList();
+		languages = FXCollections.observableArrayList();
 	}
 
 
@@ -51,7 +51,7 @@ public class Container
 	 * 
 	 * @return O conjunto do grupo de frases.
 	 */
-	public List<PhraseGroup> getGroups()
+	public ObservableList<PhraseGroup> getGroups()
 	{
 		return groups;
 	}
@@ -62,7 +62,7 @@ public class Container
 	 * 
 	 * @return O conjunto dos idiomas.
 	 */
-	public List<Language> getLanguages()
+	public ObservableList<Language> getLanguages()
 	{
 		return languages;
 	}	

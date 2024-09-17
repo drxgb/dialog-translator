@@ -6,6 +6,7 @@ import com.drxgb.dialogtranslator.model.PhraseGroup;
 import com.drxgb.dialogtranslator.util.FXRootInitializer;
 
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -92,8 +93,9 @@ public class PhrasesPane extends VBox
 
 		int index = 1;
 		String name = updateName.call(index);
+		SortedList<Tab> tabs = new SortedList<>(panGroups.getTabs(), (a, b) -> a.getText().compareTo(b.getText()));
 		
-		for (Tab tab : panGroups.getTabs())
+		for (Tab tab : tabs)
 		{			
 			if (tab.getText().equals(name))
 			{

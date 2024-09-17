@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import com.drxgb.dialogtranslator.App;
 import com.drxgb.dialogtranslator.model.Language;
 import com.drxgb.dialogtranslator.util.FXRootInitializer;
 
@@ -12,6 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -94,12 +96,29 @@ public class LanguageForm extends VBox implements Initializable
 	{
 		chkMaster.setSelected(language.isMaster());
 		txtName.setText(language.getName());
+
 		txtName.textProperty().addListener((obs, oldVal, newVal) ->
 		{
 			if (! newVal.isBlank())
 			{
 				txtName.getStyleClass().remove("error");
 				lblError.setVisible(false);
+			}
+		});
+		
+		txtName.setOnKeyPressed(ev ->
+		{
+			if (ev.getCode().equals(KeyCode.ENTER))
+			{
+				onBtnSaveAction();
+			}
+		});
+		
+		setOnKeyPressed(ev ->
+		{
+			if (ev.getCode().equals(KeyCode.ESCAPE))
+			{
+				onBtnCancelAction();
 			}
 		});
 	}
@@ -133,6 +152,8 @@ public class LanguageForm extends VBox implements Initializable
 			language.setName(txtName.getText());
 			language.setMaster(chkMaster.isSelected());
 			saved = true;
+			
+			App.getInstance().getFileManager().setUnsavedChanges(true);
 			closeWindow();
 		}
 		else
