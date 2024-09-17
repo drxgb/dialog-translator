@@ -1,12 +1,14 @@
 package com.drxgb.dialogtranslator.model;
 
+import com.drxgb.dialogtranslator.contract.Nameable;
+
 /**
  * Representa um idioma.
  * 
  * @author Dr.XGB
  * @version 1.0.0
  */
-public final class Language
+public final class Language implements Nameable
 {
 	/*
 	 * ===========================================================

@@ -14,6 +14,12 @@ import javafx.util.Callback;
  */
 public class LanguageCellFactory implements Callback<ListView<Language>, ListCell<Language>>
 {
+	/*
+	 * ===========================================================
+	 * 			*** MÉTODOS IMPLEMENTADOS ***
+	 * ===========================================================
+	 */
+
 	/**
 	 * @see javafx.util.Callback#call(java.lang.Object)
 	 */

@@ -3,13 +3,15 @@ package com.drxgb.dialogtranslator.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.drxgb.dialogtranslator.contract.Nameable;
+
 /**
  * Representa o grupo de frases.
  * 
  * @author Dr.XGB
  * @version 1.0.0
  */
-public final class PhraseGroup
+public final class PhraseGroup implements Nameable
 {
 	/*
 	 * ===========================================================

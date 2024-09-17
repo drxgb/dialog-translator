@@ -98,7 +98,7 @@
                                     <Label text="Translated text:" />
                                     <VBox spacing="10.0">
                                        <children>
-                                          <ComboBox fx:id="cboLanguage" maxWidth="1.7976931348623157E308" />
+                                          <ComboBox fx:id="cboLanguages" maxWidth="1.7976931348623157E308" />
                                           <TextArea fx:id="txtTranslatedText" />
                                        </children>
                                     </VBox>

@@ -5,9 +5,11 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import com.drxgb.dialogtranslator.App;
 import com.drxgb.dialogtranslator.model.Language;
 import com.drxgb.dialogtranslator.model.Phrase;
 import com.drxgb.dialogtranslator.model.PhraseGroup;
+import com.drxgb.dialogtranslator.scene.control.cell.SimpleNameCellFactory;
 import com.drxgb.dialogtranslator.util.Alerts;
 import com.drxgb.dialogtranslator.util.FXRootInitializer;
 
@@ -46,6 +48,16 @@ public class PhraseGroupPane extends ScrollPane implements Initializable
 	private PhraseGroup phraseGroup;
 	private Tab tab;
 	
+	
+	/*
+	 * ===========================================================
+	 * 			*** ASSOCIAÇÕES ***
+	 * ===========================================================
+	 */
+	
+	private final App app = App.getInstance();
+	
+	
 	/*
 	 * ===========================================================
 	 * 			*** AÇÕES DO CONTROLADOR ***
@@ -83,6 +95,7 @@ public class PhraseGroupPane extends ScrollPane implements Initializable
 	{
 		setupGroupNameTextField();
 		setupRemoveGroupButton();
+		setupLanguageComboBox();
 	}
 	
 	
@@ -137,5 +150,19 @@ public class PhraseGroupPane extends ScrollPane implements Initializable
 				tab.getTabPane().getTabs().remove(tab);
 			}
 		});
+	}
+	
+	
+	/**
+	 * Inicializa a caixa de seleção dos idiomas.
+	 */
+	private void setupLanguageComboBox()
+	{
+		SimpleNameCellFactory<Language> factory = new SimpleNameCellFactory<>();
+		
+		cboLanguages.setItems(app.getContainer().getLanguages());
+		cboLanguages.getSelectionModel().select(0);
+		cboLanguages.setCellFactory(factory);
+		cboLanguages.setButtonCell(factory.call(null));
 	}
 }
