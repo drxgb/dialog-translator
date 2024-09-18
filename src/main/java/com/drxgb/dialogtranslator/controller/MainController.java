@@ -313,7 +313,7 @@ public class MainController implements Initializable
 		
 		viewModes = panMain.getChildren();
 
-		viewModes.add(new PhrasesPane());
+		viewModes.add(new PhrasesPane(container.getGroups()));
 		viewModes.add(new LanguagesPane(container.getLanguages()));
 
 		viewModes.forEach(v ->

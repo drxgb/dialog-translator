@@ -1,5 +1,8 @@
 package com.drxgb.dialogtranslator.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Representa a frase.
  * 
@@ -15,6 +18,7 @@ public final class Phrase
 	 */
 	
 	private String key;
+	private Map<Language, String> texts;
 	
 	
 	/*
@@ -31,6 +35,7 @@ public final class Phrase
 	public Phrase(String key)
 	{
 		this.key = key;
+		this.texts = new HashMap<>();
 	}
 
 	
@@ -59,6 +64,17 @@ public final class Phrase
 	public void setKey(String key)
 	{
 		this.key = key;
+	}
+	
+	
+	/**
+	 * Recebe o conjunto de textos.
+	 * 
+	 * @return O conjunto de textos.
+	 */
+	public Map<Language, String> getTexts()
+	{
+		return texts;
 	}
 
 

@@ -1,5 +1,7 @@
 package com.drxgb.dialogtranslator.service;
 
+import java.util.Optional;
+
 import com.drxgb.dialogtranslator.model.Language;
 import com.drxgb.dialogtranslator.model.PhraseGroup;
 
@@ -37,6 +39,28 @@ public class Container
 	{
 		groups = FXCollections.observableArrayList();
 		languages = FXCollections.observableArrayList();
+	}
+	
+	
+	/*
+	 * ===========================================================
+	 * 			*** MÉTODOS PÚBLICOS ***
+	 * ===========================================================
+	 */
+	
+	/**
+	 * Recebe o idioma principal.
+	 * 
+	 * @return O idioma principal.
+	 */
+	public Language getMasterLanguage()
+	{
+		Optional <Language> result = getLanguages()
+				.stream()
+				.filter(lang -> lang.isMaster())
+				.findFirst();
+		
+		return result.isPresent() ? result.get() : null;
 	}
 
 

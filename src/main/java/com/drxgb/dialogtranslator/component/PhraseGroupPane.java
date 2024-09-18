@@ -9,10 +9,14 @@ import com.drxgb.dialogtranslator.App;
 import com.drxgb.dialogtranslator.model.Language;
 import com.drxgb.dialogtranslator.model.Phrase;
 import com.drxgb.dialogtranslator.model.PhraseGroup;
+import com.drxgb.dialogtranslator.scene.control.cell.PhraseCellFactory;
 import com.drxgb.dialogtranslator.scene.control.cell.SimpleNameCellFactory;
 import com.drxgb.dialogtranslator.util.Alerts;
 import com.drxgb.dialogtranslator.util.FXRootInitializer;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -23,6 +27,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 
 /**
  * Controlador da aba do grupo das frases.
@@ -38,15 +43,20 @@ public class PhraseGroupPane extends ScrollPane implements Initializable
 	 * ===========================================================
 	 */
 	
+	@FXML public VBox vbTranslation;
+	@FXML public Button btnNewPhrase;
 	@FXML public TextField txtGroupName;
 	@FXML public TextField txtFilterPhrases;
+	@FXML public TextField txtPhraseKey;
+	@FXML public TextArea txtMasterText;
 	@FXML public TextArea txtTranslatedText;
 	@FXML public Button btnRemoveGroup;
 	@FXML public ComboBox<Language> cboLanguages;
 	@FXML public ListView<Phrase> lstPhrases;
 	
-	private PhraseGroup phraseGroup;
 	private Tab tab;
+	private PhraseGroup phraseGroup;
+	private ObservableList<Phrase> phrases;
 	
 	
 	/*
@@ -69,13 +79,15 @@ public class PhraseGroupPane extends ScrollPane implements Initializable
 	 * 
 	 * @param phraseGroup O grupo de frases.
 	 * @param tab A aba que contém o grupo de frases.
+	 * @param phrases A lista de frases.
 	 * 
 	 * @throws IOException Quando o arquivo do modelo não foi encontrado.
 	 */
-	public PhraseGroupPane(PhraseGroup phraseGroup, Tab tab) throws IOException
+	public PhraseGroupPane(PhraseGroup phraseGroup, Tab tab, ObservableList<Phrase> phrases) throws IOException
 	{
 		this.phraseGroup = phraseGroup;
 		this.tab = tab;
+		this.phrases = phrases;
 
 		FXRootInitializer.init(this, "phrase/PhraseGroupTabTemplate");
 	}
@@ -93,9 +105,14 @@ public class PhraseGroupPane extends ScrollPane implements Initializable
 	@Override
 	public void initialize(URL location, ResourceBundle resources)
 	{
+		setupLanguages();
 		setupGroupNameTextField();
 		setupRemoveGroupButton();
+		setupPhrasesListView();
+		setupPhraseKeyInput();
+		setupMasterTextInput();
 		setupLanguageComboBox();
+		setupTranslatedTextInput();
 	}
 	
 	
@@ -109,9 +126,12 @@ public class PhraseGroupPane extends ScrollPane implements Initializable
 	 * Ação ao clicar no botão "New Phrase".
 	 */
 	@FXML
-	public void onBtnPhraseAction()
+	public void onBtnNewPhraseAction()
 	{
-		// TODO Adicionar nova frase
+		Phrase phrase = new Phrase(makeFallbackName());
+		
+		phrases.add(phrase);
+		lstPhrases.getSelectionModel().selectLast();
 	}
 	
 	
@@ -120,6 +140,39 @@ public class PhraseGroupPane extends ScrollPane implements Initializable
 	 * 			*** MÉTODOS PRIVADOS ***
 	 * ===========================================================
 	 */
+	
+	/**
+	 * Incializa os idiomas.
+	 */
+	private void setupLanguages()
+	{
+		ObservableList<Language> languages = app.getContainer().getLanguages();
+		
+		// Atualiza a caixa de seleção com os idiomas exceto o principal.
+		languages.addListener((ListChangeListener<Language>) ev ->
+		{
+			cboLanguages.setItems(
+					FXCollections.observableArrayList(
+							ev.getList()
+							.stream()
+							.filter(lang -> ! lang.isMaster())
+							.toList()
+					)
+			);
+			
+			if (cboLanguages.getSelectionModel().isEmpty())
+			{
+				cboLanguages.getSelectionModel().selectFirst();
+			}
+		});
+		
+		// Habilita/desabilita o botão de criar frases de acordo com a quantidade de idiomas.
+		languages.addListener((ListChangeListener<Language>) ev ->
+		{
+			btnNewPhrase.setDisable(ev.getList().isEmpty());
+		});
+	}
+	
 	
 	/**
 	 * Inicializa o campo de texto do nome do grupo.
@@ -154,15 +207,125 @@ public class PhraseGroupPane extends ScrollPane implements Initializable
 	
 	
 	/**
+	 * Inicializa a lista das frases.
+	 */
+	private void setupPhrasesListView()
+	{		
+		lstPhrases.setItems(phrases);
+		lstPhrases.setCellFactory(new PhraseCellFactory());
+
+		lstPhrases.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) ->
+		{
+			Language master = app.getContainer().getMasterLanguage();
+			Language translated = cboLanguages.getValue();
+			
+			txtPhraseKey.setUserData(newVal);
+			txtMasterText.setUserData(newVal);
+			txtTranslatedText.setUserData(newVal);
+			cboLanguages.setUserData(newVal);
+
+			txtPhraseKey.setText(newVal.getKey());
+			txtMasterText.setText(newVal.getTexts().get(master));
+			txtTranslatedText.setText(newVal.getTexts().get(translated));
+		});
+		
+		phrases.addListener((ListChangeListener<Phrase>) ev -> 
+		{			
+			vbTranslation.setDisable(ev.getList().isEmpty());
+		});
+	}
+	
+	
+	/**
+	 * Inicializa o campo da chave da frase.
+	 */
+	private void setupPhraseKeyInput()
+	{
+		txtPhraseKey.textProperty().addListener((obs, oldVal, newVal) ->
+		{
+			Phrase phrase = (Phrase) txtPhraseKey.getUserData();
+			
+			if (phrase != null)
+			{
+				phrase.setKey(newVal);
+				lstPhrases.refresh();
+			}
+		});
+	}
+	
+	
+	/**
+	 * Inicializa o campo do texto do idioma principal.
+	 */
+	private void setupMasterTextInput()
+	{
+		txtMasterText.textProperty().addListener((obs, oldVal, newVal) ->
+		{
+			Phrase phrase = (Phrase) txtPhraseKey.getUserData();
+			Language master = app.getContainer().getMasterLanguage();
+			
+			if (phrase != null)
+			{
+				phrase.getTexts().put(master, newVal);
+			}
+		});
+	}
+	
+	
+	/**
 	 * Inicializa a caixa de seleção dos idiomas.
 	 */
 	private void setupLanguageComboBox()
 	{
 		SimpleNameCellFactory<Language> factory = new SimpleNameCellFactory<>();
 		
-		cboLanguages.setItems(app.getContainer().getLanguages());
-		cboLanguages.getSelectionModel().select(0);
+		cboLanguages.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) ->
+		{
+			Phrase phrase = (Phrase) cboLanguages.getUserData();
+			
+			if (phrase != null)
+			{
+				txtTranslatedText.setText(phrase.getTexts().get(newVal));
+			}
+		});
+		
+		cboLanguages.getSelectionModel().selectFirst();
 		cboLanguages.setCellFactory(factory);
 		cboLanguages.setButtonCell(factory.call(null));
+	}
+	
+	
+	/**
+	 * Inicializa o campo de texto do idioma traduzido.
+	 */
+	private void setupTranslatedTextInput()
+	{
+		txtTranslatedText.textProperty().addListener((obs, oldVal, newVal) -> 
+		{
+			Phrase phrase = (Phrase) txtPhraseKey.getUserData();
+			Language language = cboLanguages.getValue();
+			
+			if (phrase != null)
+			{
+				phrase.getTexts().put(language, newVal);
+			}
+		});
+	}
+	
+	
+	/**
+	 * Cria um nome genérico para a frase.
+	 * 
+	 * @return O nome da frase.
+	 */
+	private String makeFallbackName()
+	{
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("phrase")
+			.append('_')
+			.append(phrases.size() + 1);
+		
+		return sb.toString();
 	}
 }

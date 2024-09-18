@@ -37,18 +37,20 @@ public class LanguageCell extends ListCell<Language>
 	 */
 	@Override
 	protected void updateItem(Language language, boolean empty)
-	{
-		StringBuilder style = new StringBuilder();
-		
+	{		
 		super.updateItem(language, empty);
 		
 		if (empty || language == null)
 		{
 			setText(null);
 			setGraphic(null);
+			setOnMouseClicked(null);
 		}
 		else
 		{
+
+			StringBuilder style = new StringBuilder();
+			
 			style.append("-fx-font-weight: ")
 				.append(language.isMaster() ? "bold" : "normal");
 			
@@ -115,7 +117,6 @@ public class LanguageCell extends ListCell<Language>
 				list.getItems().remove(language);
 				App.getInstance().getFileManager().setUnsavedChanges(true);
 				LanguageForms.checkIfHasMasterLanguages(list);
-				setOnMouseClicked(null);
 			}
 		});
 		

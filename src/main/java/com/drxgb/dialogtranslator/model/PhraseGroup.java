@@ -1,9 +1,9 @@
 package com.drxgb.dialogtranslator.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.drxgb.dialogtranslator.contract.Nameable;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  * Representa o grupo de frases.
@@ -28,7 +28,7 @@ public final class PhraseGroup implements Nameable
 	 * ===========================================================
 	 */
 	
-	private List<Phrase> phrases;
+	private ObservableList<Phrase> phrases;
 
 	
 	/*
@@ -43,7 +43,7 @@ public final class PhraseGroup implements Nameable
 	 * @param name O nome do grupo.
 	 * @param phrases O conjunto de frases.
 	 */
-	public PhraseGroup(String name, List<Phrase> phrases)
+	public PhraseGroup(String name, ObservableList<Phrase> phrases)
 	{
 		this.name = name;
 		this.phrases = phrases;
@@ -57,7 +57,7 @@ public final class PhraseGroup implements Nameable
 	 */
 	public PhraseGroup(String name)
 	{
-		this(name, new ArrayList<>());
+		this(name, FXCollections.observableArrayList());
 	}	
 
 
@@ -92,7 +92,7 @@ public final class PhraseGroup implements Nameable
 	 * 
 	 * @return O conjunto de frases.
 	 */
-	public List<Phrase> getPhrases()
+	public ObservableList<Phrase> getPhrases()
 	{
 		return phrases;
 	}
@@ -114,7 +114,7 @@ public final class PhraseGroup implements Nameable
 	 * 
 	 * @param phrases O novo conjunto das frases.
 	 */
-	public void setPhrases(List<Phrase> phrases)
+	public void setPhrases(ObservableList<Phrase> phrases)
 	{
 		this.phrases = phrases;
 	}

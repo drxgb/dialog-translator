@@ -50,7 +50,7 @@
             </Separator>
             <HBox alignment="TOP_RIGHT">
                <children>
-                  <Button mnemonicParsing="false" onAction="#onBtnPhraseAction" prefHeight="36.0" prefWidth="128.0" styleClass="btn-primary" text="New Phrase">
+                  <Button fx:id="btnNewPhrase" disable="true" mnemonicParsing="false" onAction="#onBtnNewPhraseAction" prefHeight="36.0" prefWidth="128.0" styleClass="btn-primary" text="New Phrase">
                      <graphic>
                         <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -79,18 +79,18 @@
                   </TitledPane>
                   <TitledPane collapsible="false" maxHeight="1.7976931348623157E308" text="Translation">
                      <content>
-                        <VBox spacing="24.0">
+                        <VBox fx:id="vbTranslation" disable="true" spacing="24.0">
                            <children>
                               <VBox>
                                  <children>
                                     <Label text="Phrase key:" />
-                                    <TextField />
+                                    <TextField fx:id="txtPhraseKey" />
                                  </children>
                               </VBox>
                               <VBox>
                                  <children>
                                     <Label text="Master text:" />
-                                    <TextArea />
+                                    <TextArea fx:id="txtMasterText" />
                                  </children>
                               </VBox>
                               <VBox>
