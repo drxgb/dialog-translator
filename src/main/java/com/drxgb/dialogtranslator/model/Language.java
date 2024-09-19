@@ -1,5 +1,7 @@
 package com.drxgb.dialogtranslator.model;
 
+import java.io.Serializable;
+
 import com.drxgb.dialogtranslator.contract.Nameable;
 
 /**
@@ -8,8 +10,17 @@ import com.drxgb.dialogtranslator.contract.Nameable;
  * @author Dr.XGB
  * @version 1.0.0
  */
-public final class Language implements Nameable
+public final class Language implements Nameable, Serializable
 {
+	/*
+	 * ===========================================================
+	 * 			*** CONSTANTES ***
+	 * ===========================================================
+	 */
+	
+	private static final long serialVersionUID = 1L;
+	
+
 	/*
 	 * ===========================================================
 	 * 			*** ATRIBUTOS ***

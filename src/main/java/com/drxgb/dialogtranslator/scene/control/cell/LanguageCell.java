@@ -13,7 +13,6 @@ import com.drxgb.dialogtranslator.util.LanguageForms;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
@@ -24,7 +23,7 @@ import javafx.stage.Stage;
  * @author Dr.XGB
  * @version 1.0.0
  */
-public class LanguageCell extends ListCell<Language>
+public class LanguageCell extends DraggableListCell<Language>
 {	
 	/*
 	 * ===========================================================

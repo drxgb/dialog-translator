@@ -9,7 +9,6 @@ import com.drxgb.dialogtranslator.util.Alerts;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 
 /**
@@ -18,7 +17,7 @@ import javafx.scene.control.ListView;
  * @author Dr.XGB
  * @version 1.0.0
  */
-public class PhraseCell extends ListCell<Phrase>
+public class PhraseCell extends DraggableListCell<Phrase>
 {
 
 	/*

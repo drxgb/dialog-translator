@@ -29,7 +29,7 @@
       </HBox>
       <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
          <content>
-            <ListView fx:id="lstLanguages" />
+            <ListView fx:id="lstLanguages" maxHeight="1.7976931348623157E308" />
          </content>
       </ScrollPane>
    </children>

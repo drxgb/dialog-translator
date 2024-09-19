@@ -136,7 +136,7 @@
           </Menu>
         </menus>
       </MenuBar>
-      <VBox spacing="10.0">
+      <VBox maxHeight="1.7976931348623157E308" spacing="10.0">
          <children>
             <HBox>
                <children>

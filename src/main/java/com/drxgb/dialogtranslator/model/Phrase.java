@@ -1,5 +1,6 @@
 package com.drxgb.dialogtranslator.model;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,8 +10,17 @@ import java.util.Map;
  * @author Dr.XGB
  * @version 1.0.0
  */
-public final class Phrase
+public final class Phrase implements Serializable
 {
+	/*
+	 * ===========================================================
+	 * 			*** CONSTANTES ***
+	 * ===========================================================
+	 */
+	
+	private static final long serialVersionUID = 1L;
+	
+	
 	/*
 	 * ===========================================================
 	 * 			*** ATRIBUTOS ***

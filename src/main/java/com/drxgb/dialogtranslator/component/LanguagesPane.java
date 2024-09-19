@@ -5,7 +5,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import com.drxgb.dialogtranslator.model.Language;
-import com.drxgb.dialogtranslator.scene.control.cell.LanguageCellFactory;
+import com.drxgb.dialogtranslator.scene.control.cell.LanguageCell;
 import com.drxgb.dialogtranslator.util.FXRootInitializer;
 import com.drxgb.dialogtranslator.util.LanguageForms;
 
@@ -66,7 +66,7 @@ public class LanguagesPane extends VBox implements Initializable
 	@Override
 	public void initialize(URL location, ResourceBundle resources)
 	{
-		lstLanguages.setCellFactory(new LanguageCellFactory());
+		lstLanguages.setCellFactory(p -> new LanguageCell());
 		lstLanguages.setItems(languages);
 	}
 	

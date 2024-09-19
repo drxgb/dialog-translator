@@ -1,5 +1,6 @@
 package com.drxgb.dialogtranslator.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.drxgb.dialogtranslator.model.Language;
@@ -55,12 +56,24 @@ public class Container
 	 */
 	public Language getMasterLanguage()
 	{
-		Optional <Language> result = getLanguages()
-				.stream()
+		Optional <Language> result = languages.stream()
 				.filter(lang -> lang.isMaster())
 				.findFirst();
 		
 		return result.isPresent() ? result.get() : null;
+	}
+	
+	
+	/**
+	 * Recebe a lista de isiomaas com exceção da principal.
+	 * 
+	 * @return A lista de idiomas filtrada.
+	 */
+	public List<Language> getNonMasterLanguages()
+	{
+		return languages.stream()
+				.filter(lang -> ! lang.isMaster())
+				.toList();
 	}
 
 
