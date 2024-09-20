@@ -15,6 +15,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TabPane.TabDragPolicy;
 import javafx.scene.layout.VBox;
 
 /**
@@ -90,6 +91,8 @@ public class PhrasesPane extends VBox implements Initializable
 				);
 			}
 		});
+		
+		panGroups.setTabDragPolicy(TabDragPolicy.REORDER);
 	}
 	
 	
