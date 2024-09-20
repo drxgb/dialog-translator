@@ -122,6 +122,43 @@ public class PhraseGroupPane extends ScrollPane implements Initializable
 	
 	/*
 	 * ===========================================================
+	 * 			*** MÉTODOS PÚBLICOS ***
+	 * ===========================================================
+	 */
+	
+	/**
+	 * Atualiza a caixa de seleção dos idiomas.
+	 */
+	public void updateLanguagesComboBox()
+	{
+		Container container = app.getContainer();
+		
+		cboLanguages.setItems(FXCollections.observableArrayList(container.getNonMasterLanguages()));
+		
+		if (cboLanguages.getSelectionModel().isEmpty())
+		{
+			cboLanguages.getSelectionModel().selectFirst();
+		}
+	}
+	
+	
+	/**
+	 * Atualiza o texto do idioma principal.
+	 */
+	public void updateMasterText()
+	{
+		Phrase phrase = lstPhrases.getSelectionModel().getSelectedItem();
+		Language master = app.getContainer().getMasterLanguage();
+		
+		if (txtMasterText != null)
+		{
+			txtMasterText.setText(phrase.getTexts().get(master));
+		}
+	}
+	
+	
+	/*
+	 * ===========================================================
 	 * 			*** AÇÕES DO CONTROLADOR ***
 	 * ===========================================================
 	 */
@@ -332,21 +369,5 @@ public class PhraseGroupPane extends ScrollPane implements Initializable
 			.append(phrases.size() + 1);
 		
 		return sb.toString();
-	}
-	
-	
-	/**
-	 * Atualiza a caixa de seleção dos idiomas.
-	 */
-	private void updateLanguagesComboBox()
-	{
-		Container container = app.getContainer();
-		
-		cboLanguages.setItems(FXCollections.observableArrayList(container.getNonMasterLanguages()));
-		
-		if (cboLanguages.getSelectionModel().isEmpty())
-		{
-			cboLanguages.getSelectionModel().selectFirst();
-		}
 	}
 }

@@ -33,6 +33,7 @@ public class LanguagesPane extends VBox implements Initializable
 	@FXML public ListView<Language> lstLanguages;
 	
 	private ObservableList<Language> languages;
+	private PhrasesPane phrasesPane;
 	
 	
 	/*
@@ -45,11 +46,15 @@ public class LanguagesPane extends VBox implements Initializable
 	 * Cria o componente da lista de idiomas.
 	 * 
 	 * @param languages A lista de idiomas.
+	 * @param phrasesPane O conteiner das frases.
+	 * 
 	 * @throws IOException Quando o arquivo do componente não é encontrado.
 	 */
-	public LanguagesPane(ObservableList<Language> languages) throws IOException
+	public LanguagesPane(ObservableList<Language> languages, PhrasesPane phrasesPane) throws IOException
 	{
 		this.languages = languages;
+		this.phrasesPane = phrasesPane;
+		
 		FXRootInitializer.init(this, "language/LanguagesView");
 	}
 	
@@ -66,7 +71,14 @@ public class LanguagesPane extends VBox implements Initializable
 	@Override
 	public void initialize(URL location, ResourceBundle resources)
 	{
-		lstLanguages.setCellFactory(p -> new LanguageCell());
+		lstLanguages.setCellFactory(p ->
+		{
+			LanguageCell cell = new LanguageCell();
+			
+			cell.setOnUpdate(language -> phrasesPane.updateTabs());
+			return cell;
+		});
+
 		lstLanguages.setItems(languages);
 	}
 	

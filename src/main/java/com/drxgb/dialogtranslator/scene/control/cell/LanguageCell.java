@@ -2,6 +2,7 @@ package com.drxgb.dialogtranslator.scene.control.cell;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import com.drxgb.dialogtranslator.App;
 import com.drxgb.dialogtranslator.component.LanguageForm;
@@ -24,13 +25,40 @@ import javafx.stage.Stage;
  * @version 1.0.0
  */
 public class LanguageCell extends DraggableListCell<Language>
-{	
+{
+	/*
+	 * ===========================================================
+	 * 			*** ATRIBUTOS ***
+	 * ===========================================================
+	 */
+	
+	private Consumer<Language> onUpdate;
+	
+	
+	/*
+	 * ===========================================================
+	 * 			*** SETTERS ***
+	 * ===========================================================
+	 */
+
+	/**
+	 * Define a callback que será executada quando o idioma é modificado.
+	 * 
+	 * @param onUpdate A callback.
+	 */
+	public void setOnUpdate(Consumer<Language> onUpdate)
+	{
+		this.onUpdate = onUpdate;
+	}
+	
+	
 	/*
 	 * ===========================================================
 	 * 			*** MÉTODOS PROTEGIDOS ***
 	 * ===========================================================
 	 */
-	
+
+
 	/**
 	 * @see javafx.scene.control.Cell#updateItem(java.lang.Object, boolean)
 	 */
@@ -47,7 +75,6 @@ public class LanguageCell extends DraggableListCell<Language>
 		}
 		else
 		{
-
 			StringBuilder style = new StringBuilder();
 			
 			style.append("-fx-font-weight: ")
@@ -78,6 +105,11 @@ public class LanguageCell extends DraggableListCell<Language>
 						if (form.isSaved())
 						{
 							LanguageForms.updateMasterLanguages(getListView(), language);
+							
+							if (onUpdate != null)
+							{
+								onUpdate.accept(language);
+							}
 						}						
 					}
 				}

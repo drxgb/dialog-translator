@@ -12,6 +12,7 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.VBox;
@@ -77,6 +78,7 @@ public class PhrasesPane extends VBox implements Initializable
 							.toList()
 				);
 			}
+
 			if (ev.wasRemoved())
 			{
 				phraseGroups.removeAll(
@@ -98,13 +100,13 @@ public class PhrasesPane extends VBox implements Initializable
 	 */
 	
 	/**
-	 * Atualiza as abas dos grupos de frases.
+	 * Povoa as abas dos grupos de frases.
 	 * 
 	 * @param phraseGroups A nova lista do grupo de frases.
 	 * 
 	 * @throws IOException Quando a aba não pode ser criada.
 	 */
-	public void updateTabs(ObservableList<PhraseGroup> phraseGroups) throws IOException
+	public void populateTabs(ObservableList<PhraseGroup> phraseGroups) throws IOException
 	{
 		tabs.clear();
 		
@@ -112,6 +114,26 @@ public class PhrasesPane extends VBox implements Initializable
 		{
 			tabs.add(PhraseGroupTabs.makeTab(group));
 		}
+	}
+	
+	
+	/**
+	 * Atualiza as abas.
+	 */
+	public void updateTabs()
+	{
+		panGroups.getTabs().forEach(tab ->
+		{
+			Node content = tab.getContent();
+			
+			if (content instanceof PhraseGroupPane)
+			{
+				PhraseGroupPane phraseGroupPane = (PhraseGroupPane) content;
+				
+				phraseGroupPane.updateMasterText();
+				phraseGroupPane.updateLanguagesComboBox();
+			}
+		});
 	}
 	
 	

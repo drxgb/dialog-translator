@@ -310,11 +310,13 @@ public class MainController implements Initializable
 	private void initializeViewModes() throws IOException
 	{
 		Container container = app.getContainer();
+		PhrasesPane phrasesPane = new PhrasesPane(container.getGroups());
+		LanguagesPane languagesPane = new LanguagesPane(container.getLanguages(), phrasesPane);
 		
 		viewModes = panMain.getChildren();
 
-		viewModes.add(new PhrasesPane(container.getGroups()));
-		viewModes.add(new LanguagesPane(container.getLanguages()));
+		viewModes.add(phrasesPane);
+		viewModes.add(languagesPane);
 
 		viewModes.forEach(v ->
 		{
