@@ -33,7 +33,7 @@
       <CheckBox fx:id="chkMaster" mnemonicParsing="false" text="Set as Master language" />
       <HBox alignment="BOTTOM_RIGHT" spacing="8.0">
          <children>
-            <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onBtnCancelAction" prefWidth="80.0" styleClass="btn-secondary" text="Cancel">
+            <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onBtnCancelAction" prefWidth="80.0" styleClass="btn-remove" text="Cancel">
                <graphic>
                   <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                      <image>
