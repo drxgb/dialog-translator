@@ -84,13 +84,13 @@
                               <VBox>
                                  <children>
                                     <Label text="Phrase key:" />
-                                    <TextField fx:id="txtPhraseKey" />
+                                    <TextField fx:id="txtPhraseKey" onKeyTyped="#onTextTypedAction" />
                                  </children>
                               </VBox>
                               <VBox>
                                  <children>
                                     <Label text="Master text:" />
-                                    <TextArea fx:id="txtMasterText" />
+                                    <TextArea fx:id="txtMasterText" onKeyTyped="#onTextTypedAction" />
                                  </children>
                               </VBox>
                               <VBox>
@@ -99,7 +99,7 @@
                                     <VBox spacing="10.0">
                                        <children>
                                           <ComboBox fx:id="cboLanguages" maxWidth="1.7976931348623157E308" />
-                                          <TextArea fx:id="txtTranslatedText" />
+                                          <TextArea fx:id="txtTranslatedText" onKeyTyped="#onTextTypedAction" />
                                        </children>
                                     </VBox>
                                  </children>

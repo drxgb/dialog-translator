@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import com.drxgb.dialogtranslator.App;
 import com.drxgb.dialogtranslator.model.PhraseGroup;
 import com.drxgb.dialogtranslator.util.FXRootInitializer;
 import com.drxgb.dialogtranslator.util.PhraseGroupTabs;
@@ -36,6 +37,16 @@ public class PhrasesPane extends VBox implements Initializable
 	
 	private ObservableList<PhraseGroup> phraseGroups;
 	private ObservableList<Tab> tabs;
+	private ListChangeListener<Tab> onTabListChange;
+	
+	
+	/*
+	 * ===========================================================
+	 * 			*** ASSOCIAÇÕES ***
+	 * ===========================================================
+	 */
+	
+	private final App app = App.getInstance();
 	
 	
 	/*
@@ -78,12 +89,14 @@ public class PhrasesPane extends VBox implements Initializable
 	 */
 	public void populateTabs()
 	{
+		tabs.removeListener(onTabListChange);
 		tabs.clear();
 		tabs.addAll(
 				phraseGroups.stream()
 					.map(group -> PhraseGroupTabs.makeTab(group))
 					.toList()
 		);
+		tabs.addListener(onTabListChange);
 	}
 	
 	
@@ -139,9 +152,7 @@ public class PhrasesPane extends VBox implements Initializable
 	 */
 	private void setupTabs()
 	{
-		tabs = panGroups.getTabs();
-
-		tabs.addListener((ListChangeListener<Tab>) ev ->
+		onTabListChange = ev ->
 		{
 			ev.next();
 			
@@ -166,8 +177,13 @@ public class PhrasesPane extends VBox implements Initializable
 							.toList()
 				);
 			}
-		});
+			
+			app.getFileChangeObserver().update(true);
+		};
 		
+		tabs = panGroups.getTabs();
+
+		tabs.addListener(onTabListChange);		
 		panGroups.setTabDragPolicy(TabDragPolicy.REORDER);
 	}
 }

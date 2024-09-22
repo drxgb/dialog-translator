@@ -28,6 +28,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
@@ -131,6 +132,7 @@ public class PhraseGroupPane extends ScrollPane implements Initializable
 		Container container = app.getContainer();
 		
 		cboLanguages.setItems(FXCollections.observableArrayList(container.getNonMasterLanguages()));
+		txtTranslatedText.setDisable(cboLanguages.getItems().isEmpty());
 		
 		if (cboLanguages.getSelectionModel().isEmpty())
 		{
@@ -184,6 +186,24 @@ public class PhraseGroupPane extends ScrollPane implements Initializable
 	}
 	
 	
+	/**
+	 * Ação ao digitar nos campos de texto.
+	 * 
+	 * @param ev Evento disparado.
+	 */
+	@FXML
+	public void onTextTypedAction(KeyEvent ev)
+	{
+		String ch = ev.getCharacter();
+		byte charByte = ch != null ? ch.getBytes()[0] : 0x00;
+		
+		if (charByte != 0x1B)
+		{
+			app.getFileChangeObserver().update(true);
+		}
+	}
+
+	
 	/*
 	 * ===========================================================
 	 * 			*** MÉTODOS PRIVADOS ***
@@ -226,10 +246,12 @@ public class PhraseGroupPane extends ScrollPane implements Initializable
 	{
 		txtGroupName.setText(phraseGroup.getName());
 		txtGroupName.requestFocus();
+
 		txtGroupName.textProperty().addListener((obs, oldVal, newVal) ->
 		{
 			tab.setText(newVal);
 			phraseGroup.setName(newVal);
+			app.getFileChangeObserver().update(true);
 		});
 	}
 	
@@ -278,7 +300,10 @@ public class PhraseGroupPane extends ScrollPane implements Initializable
 		});
 		
 		lstPhrases.getSelectionModel().selectFirst();		
-		phrases.addListener((ListChangeListener<Phrase>) ev -> updateView());
+		phrases.addListener((ListChangeListener<Phrase>) ev -> {
+			updateView();
+			app.getFileChangeObserver().update(true);
+		});
 	}
 	
 	
@@ -313,6 +338,7 @@ public class PhraseGroupPane extends ScrollPane implements Initializable
 			if (phrase != null)
 			{
 				phrase.getTexts().put(master, newVal);
+				//app.getFileChangeObserver().update(true);
 			}
 		});
 	}
@@ -354,6 +380,7 @@ public class PhraseGroupPane extends ScrollPane implements Initializable
 			if (phrase != null)
 			{
 				phrase.getTexts().put(language, newVal);
+				//app.getFileChangeObserver().update(true);
 			}
 		});
 	}
