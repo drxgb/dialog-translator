@@ -153,7 +153,7 @@ public class LanguageForm extends VBox implements Initializable
 			language.setMaster(chkMaster.isSelected());
 			saved = true;
 			
-			App.getInstance().getFileManager().setUnsavedChanges(true);
+			App.getInstance().getFileChangeObserver().update(true);
 			closeWindow();
 		}
 		else

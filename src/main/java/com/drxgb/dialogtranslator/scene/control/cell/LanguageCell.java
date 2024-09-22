@@ -146,7 +146,7 @@ public class LanguageCell extends DraggableListCell<Language>
 			if (option.get() == ButtonType.YES)
 			{
 				list.getItems().remove(language);
-				App.getInstance().getFileManager().setUnsavedChanges(true);
+				App.getInstance().getFileChangeObserver().update(true);
 				LanguageForms.checkIfHasMasterLanguages(list);
 			}
 		});

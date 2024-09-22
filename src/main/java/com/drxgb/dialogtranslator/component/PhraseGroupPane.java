@@ -1,6 +1,5 @@
 package com.drxgb.dialogtranslator.component;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -83,10 +82,8 @@ public class PhraseGroupPane extends ScrollPane implements Initializable
 	 * @param phraseGroup O grupo de frases.
 	 * @param tab A aba que contém o grupo de frases.
 	 * @param phrases A lista de frases.
-	 * 
-	 * @throws IOException Quando o arquivo do modelo não foi encontrado.
 	 */
-	public PhraseGroupPane(PhraseGroup phraseGroup, Tab tab, ObservableList<Phrase> phrases) throws IOException
+	public PhraseGroupPane(PhraseGroup phraseGroup, Tab tab, ObservableList<Phrase> phrases)
 	{
 		this.phraseGroup = phraseGroup;
 		this.tab = tab;
@@ -139,6 +136,16 @@ public class PhraseGroupPane extends ScrollPane implements Initializable
 		{
 			cboLanguages.getSelectionModel().selectFirst();
 		}
+	}
+	
+	
+	/**
+	 * Atualiza a tela do grupo de frases.
+	 */
+	public void updateView()
+	{
+		vbTranslation.setDisable(phrases.isEmpty());
+		updateLanguagesComboBox();
 	}
 	
 	
@@ -270,11 +277,8 @@ public class PhraseGroupPane extends ScrollPane implements Initializable
 			}
 		});
 		
-		phrases.addListener((ListChangeListener<Phrase>) ev -> 
-		{			
-			vbTranslation.setDisable(ev.getList().isEmpty());
-			updateLanguagesComboBox();
-		});
+		lstPhrases.getSelectionModel().selectFirst();		
+		phrases.addListener((ListChangeListener<Phrase>) ev -> updateView());
 	}
 	
 	

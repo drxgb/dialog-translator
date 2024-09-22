@@ -1,7 +1,5 @@
-package com.drxgb.dialogtranslator.service;
+package com.drxgb.dialogtranslator.service.manager;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -9,15 +7,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Objects;
 
-import com.drxgb.dialogtranslator.App;
-
-import javafx.scene.control.MenuItem;
+import com.drxgb.dialogtranslator.service.io.ReaderService;
+import com.drxgb.dialogtranslator.service.io.WriterService;
 
 /**
- * Responsável por gerenciar arquivos, tais como checar
- * alterações, fazer carregamento e salvamento.
+ * Responsável por gerenciar arquivos, tais como
+ * fazer carregamento e salvamento dos dados.
  * 
  * @author Dr.XGB
  * @version 1.0.0
@@ -26,21 +22,10 @@ public class FileManager
 {
 	/*
 	 * ===========================================================
-	 * 			*** ATRIBUTOS ***
-	 * ===========================================================
-	 */
-	
-	private boolean unsavedChanges;
-	
-	
-	/*
-	 * ===========================================================
 	 * 			*** ASSOCIAÇÕES ***
 	 * ===========================================================
 	 */
-	
-	private App app;
-	private MenuItem saveMenuItem;
+
 	private ReaderService reader;
 	private WriterService writer;
 
@@ -53,19 +38,11 @@ public class FileManager
 	
 	/**
 	 * Cria o gerenciador de arquivos.
-	 * 
-	 * @param app A instância da aplicação.
 	 */
-	public FileManager(App app)
+	public FileManager()
 	{
-		Objects.requireNonNull(app);
-		
-		this.app = app;
-		this.saveMenuItem = null;
 		this.reader = null;
 		this.writer = null;
-
-		setUnsavedChanges(true);
 	}
 	
 	 
@@ -85,7 +62,7 @@ public class FileManager
 	 */
 	public void save(String filename) throws FileNotFoundException, IOException
 	{
-		try (OutputStream out = new BufferedOutputStream(new FileOutputStream(new File(filename))))
+		try (OutputStream out = new FileOutputStream(new File(filename)))
 		{
 			if (writer == null)
 			{
@@ -93,7 +70,6 @@ public class FileManager
 			}
 			
 			writer.write(out);
-			setUnsavedChanges(false);
 		}
 	}
 	
@@ -108,7 +84,7 @@ public class FileManager
 	 */
 	public void load(String filename) throws FileNotFoundException, IOException
 	{
-		try (InputStream in = new BufferedInputStream(new FileInputStream(new File(filename))))
+		try (InputStream in = new FileInputStream(new File(filename)))
 		{
 			if (reader == null)
 			{
@@ -116,7 +92,6 @@ public class FileManager
 			}
 			
 			reader.read(in);
-			setUnsavedChanges(false);
 		}
 	}
 	
@@ -126,28 +101,6 @@ public class FileManager
 	 * 			*** GETTERS E SETTERS ***
 	 * ===========================================================
 	 */
-
-	/**
-	 * Verifica se o arquivo possui alterações não salvas.
-	 * 
-	 * @return Sinal das alterações não salvas.
-	 */
-	public boolean hasUnsavedChanges()
-	{
-		return unsavedChanges;
-	}
-	
-	
-	/**
-	 * Recebe o item do menu de salvar.
-	 * 
-	 * @return O item do menu.
-	 */
-	public MenuItem getSaveMenuItem()
-	{
-		return saveMenuItem;
-	}
-
 
 	/**
 	 * Recebe o leitor de arquivos.
@@ -168,40 +121,6 @@ public class FileManager
 	public WriterService getWriter()
 	{
 		return writer;
-	}
-	
-	
-	/**
-	 * Sinaliza se a aplicação possui alterações não salvas.
-	 * 
-	 * @param unsavedChanges Sinal das alterações não salvas.
-	 */
-	public void setUnsavedChanges(boolean unsavedChanges)
-	{
-		final StageTitleManager titleManager = app.getTitleManager();
-		
-		if (titleManager != null)
-		{
-			titleManager.setUnsaved(unsavedChanges);
-		}
-		if (saveMenuItem != null)
-		{
-			saveMenuItem.setDisable(! unsavedChanges);
-		}
-		
-		this.unsavedChanges = unsavedChanges;
-	}
-	
-	
-	/**
-	 * Define o item do menu de ação de salvar.
-	 * 
-	 * @param saveMenuItem O item do menu.
-	 */
-	public void setSaveMenuItem(MenuItem saveMenuItem)
-	{
-		saveMenuItem.setDisable(! unsavedChanges);
-		this.saveMenuItem = saveMenuItem;
 	}
 
 

@@ -1,13 +1,10 @@
 package com.drxgb.dialogtranslator.util;
 
-import java.io.IOException;
-
 import com.drxgb.dialogtranslator.component.PhraseGroupPane;
 import com.drxgb.dialogtranslator.model.PhraseGroup;
 
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
-import javafx.scene.Parent;
 import javafx.scene.control.Tab;
 
 /**
@@ -29,14 +26,13 @@ public abstract class PhraseGroupTabs
 	 * 
 	 * @param group O grupo de frases.
 	 * @return Uma nova aba.
-	 * 
-	 * @throws IOException Quando a raiz não for carregada.
 	 */
-	public static Tab makeTab(PhraseGroup group) throws IOException
+	public static Tab makeTab(PhraseGroup group)
 	{
 		Tab tab = new Tab(group.getName());
-		Parent root = new PhraseGroupPane(group, tab, group.getPhrases());
+		PhraseGroupPane root = new PhraseGroupPane(group, tab, group.getPhrases());
 
+		root.updateView();
 		tab.setContent(root);
 		tab.setUserData(group);
 		

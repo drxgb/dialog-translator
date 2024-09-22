@@ -2,6 +2,7 @@ package com.drxgb.dialogtranslator;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -9,10 +10,11 @@ import java.util.Properties;
 
 import com.drxgb.dialogtranslator.controller.MainController;
 import com.drxgb.dialogtranslator.service.Container;
-import com.drxgb.dialogtranslator.service.FileManager;
-import com.drxgb.dialogtranslator.service.StageTitleManager;
-import com.drxgb.dialogtranslator.service.StyleManager;
+import com.drxgb.dialogtranslator.service.FileChangeObserver;
 import com.drxgb.dialogtranslator.service.ViewLoader;
+import com.drxgb.dialogtranslator.service.manager.FileManager;
+import com.drxgb.dialogtranslator.service.manager.StageTitleManager;
+import com.drxgb.dialogtranslator.service.manager.StyleManager;
 import com.drxgb.util.PropertiesManager;
 
 import javafx.application.Application;
@@ -82,6 +84,11 @@ public class App extends Application
 	 * O gerenciador de arquivos da aplicação.
 	 */
 	private FileManager fileManager;
+	
+	/**
+	 * Notificador de alterações no arquivo.
+	 */
+	private FileChangeObserver fileChangeObserver;
 
 	/**
 	 * O carregador de telas.
@@ -97,6 +104,11 @@ public class App extends Application
 	 * O arquivo de configuração da aplicação.
 	 */
 	private Properties settings;
+	
+	/**
+	 * A lista de extensões de arquivo suportadas pela aplicação.
+	 */
+	private List<String> supportedFileExtensions;
 	
 	/**
 	 * Cena principal da aplicação.
@@ -198,6 +210,16 @@ public class App extends Application
 	{
 		return fileManager;
 	}
+	
+	
+	/**
+	 * Recebe o notificador de alterações do arquivo.
+	 * @return
+	 */
+	public FileChangeObserver getFileChangeObserver()
+	{
+		return fileChangeObserver;
+	}
 
 
 	/**
@@ -235,6 +257,17 @@ public class App extends Application
 		}
 		
 		return settings;
+	}
+	
+	
+	/**
+	 * Recebe a lista de extensões de arquivo suportadas pela aplicação.
+	 * 
+	 * @return A lista de extensões.
+	 */
+	public List<String> getSupportedFileExtensionsList()
+	{
+		return supportedFileExtensions;
 	}
 
 	
@@ -280,9 +313,21 @@ public class App extends Application
 		container = new Container();
 		viewLoader = new ViewLoader("view");
 		titleManager = new StageTitleManager(stage, NAME);
-		fileManager = new FileManager(this);
+		fileManager = new FileManager();
 		
+		setupSupportedFileExtensionsList();
 		setupStyles();
+		setupFileChangeObserver();
+	}
+	
+	
+	/**
+	 * Inicializa a lista de arquivos suportados.
+	 */
+	private void setupSupportedFileExtensionsList()
+	{
+		supportedFileExtensions = new ArrayList<>();
+		supportedFileExtensions.add("*.xld");
 	}
 	
 	
@@ -300,5 +345,15 @@ public class App extends Application
 		styles.add("Dark");
 
 		styleManager = new StyleManager(styles, basePath);
+	}
+	
+	
+	/**
+	 * Inicializa o notificador de alteração do arquivo.
+	 */
+	private void setupFileChangeObserver()
+	{
+		fileChangeObserver = new FileChangeObserver();		
+		fileChangeObserver.subscribe(changed -> titleManager.setUnsaved(changed));
 	}
 }

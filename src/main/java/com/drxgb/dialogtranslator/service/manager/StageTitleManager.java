@@ -1,4 +1,4 @@
-package com.drxgb.dialogtranslator.service;
+package com.drxgb.dialogtranslator.service.manager;
 
 import javafx.stage.Stage;
 
@@ -101,9 +101,11 @@ public class StageTitleManager
 			sb.append('*');
 		}
 		
-		sb.append(getTitle())
+		sb.append(baseTitle)
 			.append(" - ")
-			.append(baseTitle);
+			.append('[')
+			.append(getTitle())
+			.append(']');
 		
 		return sb.toString();
 	}

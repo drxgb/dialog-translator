@@ -3,7 +3,7 @@ package com.drxgb.dialogtranslator.util;
 import java.util.Optional;
 
 import com.drxgb.dialogtranslator.App;
-import com.drxgb.dialogtranslator.service.StyleManager;
+import com.drxgb.dialogtranslator.service.manager.StyleManager;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;

@@ -1,4 +1,4 @@
-package com.drxgb.dialogtranslator.service;
+package com.drxgb.dialogtranslator.service.manager;
 
 import java.util.List;
 

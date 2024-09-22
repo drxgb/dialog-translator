@@ -1,6 +1,7 @@
 package com.drxgb.dialogtranslator.controller;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -12,9 +13,13 @@ import com.drxgb.dialogtranslator.App;
 import com.drxgb.dialogtranslator.component.LanguagesPane;
 import com.drxgb.dialogtranslator.component.PhrasesPane;
 import com.drxgb.dialogtranslator.service.Container;
-import com.drxgb.dialogtranslator.service.StyleManager;
+import com.drxgb.dialogtranslator.service.io.XldReaderService;
+import com.drxgb.dialogtranslator.service.manager.FileManager;
+import com.drxgb.dialogtranslator.service.manager.StyleManager;
 import com.drxgb.dialogtranslator.util.DialogStyleDecorator;
+import com.drxgb.dialogtranslator.util.RecentFiles;
 import com.drxgb.dialogtranslator.util.StyleDecorator;
+import com.drxgb.javafxutils.FileChooserFactory;
 import com.drxgb.util.PropertiesManager;
 import com.drxgb.util.ValueHandler;
 
@@ -50,6 +55,18 @@ public class MainController implements Initializable
 {
 	/*
 	 * ===========================================================
+	 * 			*** CONSTANTES ***
+	 * ===========================================================
+	 */
+	
+	/**
+	 * Chave do último caminho do caminho aberto nas configurações.
+	 */
+	private static final String OPEN_PATH_KEY = "lastOpenedPath";
+	
+	
+	/*
+	 * ===========================================================
 	 * 			*** ATRIBUTOS ***
 	 * ===========================================================
 	 */
@@ -57,6 +74,7 @@ public class MainController implements Initializable
 	@FXML public Parent root;
 	
 	// Menu
+	@FXML public Menu mnuRecentFiles;
 	@FXML public Menu mnuStyle;
 	@FXML public MenuItem mnitSave;
 	@FXML public RadioMenuItem mnitPhrases;
@@ -70,6 +88,9 @@ public class MainController implements Initializable
 	
 	// Telas internas
 	private ObservableList<Node> viewModes;
+	
+	// Arquivos recentes
+	private List<String> recentFiles;
 	
 	
 	/*
@@ -95,11 +116,11 @@ public class MainController implements Initializable
 	{
 		try
 		{
-			initializeViewModes();		
-			initializeStyles();
-			initializeViewModeMenuItems();
-			
-			App.getInstance().getFileManager().setSaveMenuItem(mnitSave);
+			setupRecentFiles();
+			setupViewModes();
+			setupStyles();
+			setupViewModeMenuItems();
+			setupFileChangeObserver();
 		}
 		catch (IOException e)
 		{
@@ -124,15 +145,10 @@ public class MainController implements Initializable
 		final App app = App.getInstance();		
 		Properties settings = app.getSettings();
 		
-		if (app.getFileManager().hasUnsavedChanges())
-		{			
-			ButtonType confirmation = saveConfirmationAlert().get();
-			
-			if (confirmation == ButtonType.CANCEL)
-			{
-				ev.consume();
-				return;
-			}
+		if (saveConfirmed() == ButtonType.CANCEL)
+		{
+			ev.consume();
+			return;
 		}
 
 		PropertiesManager.save(new File(App.SETTINGS_FILENAME), settings);
@@ -145,19 +161,10 @@ public class MainController implements Initializable
 	@FXML
 	public void onMnitNewAction()
 	{
-		final App app = App.getInstance();		
-		
-		if (app.getFileManager().hasUnsavedChanges())
-		{			
-			ButtonType confirmation = saveConfirmationAlert().get();
-			
-			if (confirmation == ButtonType.CANCEL)
-			{
-				return;
-			}
+		if (saveConfirmed() != ButtonType.CANCEL)
+		{
+			// TODO Novo arquivo.
 		}
-		
-		// TODO Novo arquivo.
 	}
 	
 	
@@ -166,18 +173,29 @@ public class MainController implements Initializable
 	 */
 	@FXML
 	public void onMnitOpenAction()
-	{		
-		if (app.getFileManager().hasUnsavedChanges())
+	{
+		if (saveConfirmed() == ButtonType.CANCEL)
 		{			
-			ButtonType confirmation = saveConfirmationAlert().get();
+			Stage stage = app.getStage();
+			Properties settings = app.getSettings();
+			String path;
 			
-			if (confirmation == ButtonType.CANCEL)
+			File file = FileChooserFactory.openSingleFile(
+					stage,
+					"Open file",
+					"Dialog files",
+					settings.getProperty(OPEN_PATH_KEY),
+					app.getSupportedFileExtensionsList()
+					);
+			
+			if (file != null)
 			{
-				return;
+				path = file.getAbsolutePath();
+				settings.setProperty(OPEN_PATH_KEY, file.getParent());
+				addToRecentFilesList(path);
+				loadFile(path);
 			}
 		}
-
-		// TODO Abrir arquivo.
 	}
 	
 	
@@ -303,11 +321,35 @@ public class MainController implements Initializable
 	 */
 	
 	/**
+	 * Ação ao clicar no item de menu de um arquivo recente.
+	 * 
+	 * @param ev O evento disparado.
+	 */
+	private void onMnitLoadRecentFilesAction(String file)
+	{
+		if (saveConfirmed() != ButtonType.CANCEL)
+		{			
+			addToRecentFilesList(file);
+			loadFile(file);
+		}		
+	}
+	
+	/**
+	 * Inicializa a lista de arquivos recentes.
+	 */
+	private void setupRecentFiles()
+	{
+		recentFiles = RecentFiles.read();
+		updateRecentFilesItems();
+	}
+
+	
+	/**
 	 * Inicializa os modos de visualização.
 	 * 
 	 * @throws IOException Quando o arquivo da tela não é encontrado.
 	 */
-	private void initializeViewModes() throws IOException
+	private void setupViewModes() throws IOException
 	{
 		Container container = app.getContainer();
 		PhrasesPane phrasesPane = new PhrasesPane(container.getGroups());
@@ -333,7 +375,7 @@ public class MainController implements Initializable
 	/**
 	 * Inicializa os estilos.
 	 */
-	private void initializeStyles()
+	private void setupStyles()
 	{
 		final App app =  App.getInstance();
 		final StyleManager styleManager = app.getStyleManager();
@@ -379,7 +421,7 @@ public class MainController implements Initializable
 	/**
 	 * Inicializa os botões alternados dos modos de visualização.
 	 */
-	private void initializeViewModeMenuItems()
+	private void setupViewModeMenuItems()
 	{
 		viewMode.selectedToggleProperty().addListener((obs, oldVal, newVal) ->
 		{
@@ -392,6 +434,15 @@ public class MainController implements Initializable
 	
 	
 	/**
+	 * Adiciona as notificações de alteração do arquivo.
+	 */
+	private void setupFileChangeObserver()
+	{
+		app.getFileChangeObserver().subscribe(changed -> mnitSave.setDisable(! changed));
+	}
+	
+	
+	/**
 	 * Alterna o modo de visualização da janela.
 	 * 
 	 * @param index O índice da visualização.
@@ -400,10 +451,38 @@ public class MainController implements Initializable
 	{
 		if (viewModes.size() > 0)
 		{
-			index = ValueHandler.clamp(index, 0, viewModes.size());
+			index = ValueHandler.clamp(index, 0, viewModes.size() - 1);
 			viewModes.forEach(v -> v.setVisible(false));
 			viewModes.get(index).setVisible(true);
 		}
+	}
+	
+	
+	/**
+	 * Certifica se há arquivos com modificações não salvas.
+	 * 
+	 * @return Sinal da modificação não salva.
+	 */
+	private boolean hasUnsavedChanges()
+	{
+		return app.getTitleManager().isUnsaved();
+	}
+	
+	
+	/**
+	 * Recebe a opção da confirmação de salvamento.
+	 * 
+	 * @return 	A opção de salvamento. Se a confirmação não foi realizada,
+	 * 			será entregue o valor <code>null</code>.
+	 */
+	private ButtonType saveConfirmed()
+	{
+		if (hasUnsavedChanges())
+		{			
+			return saveConfirmationAlert().get();
+		}
+		
+		return null;
 	}
 	
 	
@@ -441,5 +520,83 @@ public class MainController implements Initializable
 		}
 		
 		return option;
+	}
+	
+	
+	/**
+	 * Atualiza a lista do menu de arquivos recentes.
+	 * 
+	 * @param files A lista de arquivos recentes.
+	 */
+	private void updateRecentFilesItems()
+	{
+		ObservableList<MenuItem> items = mnuRecentFiles.getItems();
+		int index = 1;
+		
+		items.clear();
+		
+		for (String file : recentFiles)
+		{
+			MenuItem item = new MenuItem();
+			StringBuilder sb = new StringBuilder();
+
+			sb.append(index++).append(": ").append(file);
+
+			item.setText(sb.toString());
+			item.setUserData(file);
+			item.setOnAction(ev -> onMnitLoadRecentFilesAction(file));
+			items.add(item);
+		}
+	}
+	
+	
+	/**
+	 * Adiciona o arquivo carregado à lista de arquivos recentes.
+	 * 
+	 * @param file O caminho do arquivo carregado.
+	 */
+	private void addToRecentFilesList(String file)
+	{
+		if (recentFiles.contains(file))
+		{
+			recentFiles.remove(file);
+		}
+		
+		recentFiles.addFirst(file);
+		RecentFiles.update(recentFiles);
+		updateRecentFilesItems();
+	}
+	
+	
+	/**
+	 * Carrega o arquivo solicitado.
+	 * 
+	 * @param filename O nome do arquivo.
+	 */
+	private void loadFile(String filename)
+	{
+		try
+		{
+			FileManager fileManager = app.getFileManager();
+			Container c = app.getContainer();
+			PhrasesPane phrasesPane = (PhrasesPane) viewModes.getFirst();
+
+			fileManager.setReader(new XldReaderService(c.getLanguages(), c.getGroups()));
+			fileManager.load(filename);
+			phrasesPane.populateTabs();
+			
+			app.getTitleManager().setTitle(filename);
+			app.getFileChangeObserver().update(false);
+		}
+		catch (FileNotFoundException e)
+		{
+			// TODO Janela de erro - Arquivo não encontrado.
+			e.printStackTrace();
+		}
+		catch (IOException e)
+		{
+			// TODO Janela de erro - Não foi possível ler o arquivo.
+			e.printStackTrace();
+		}
 	}
 }

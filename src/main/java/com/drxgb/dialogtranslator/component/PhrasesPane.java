@@ -63,36 +63,7 @@ public class PhrasesPane extends VBox implements Initializable
 	@Override
 	public void initialize(URL location, ResourceBundle resources)
 	{
-		tabs = panGroups.getTabs();
-
-		tabs.addListener((ListChangeListener<Tab>) ev ->
-		{
-			ev.next();
-			
-			if (ev.wasAdded())
-			{
-				phraseGroups.addAll(
-						ev.getAddedSubList()
-							.stream()
-							.map(t -> (PhraseGroup) t.getUserData())
-							.filter(g -> g != null)
-							.toList()
-				);
-			}
-
-			if (ev.wasRemoved())
-			{
-				phraseGroups.removeAll(
-						ev.getRemoved()
-							.stream()
-							.map(t -> (PhraseGroup) t.getUserData())
-							.filter(g -> g != null)
-							.toList()
-				);
-			}
-		});
-		
-		panGroups.setTabDragPolicy(TabDragPolicy.REORDER);
+		setupTabs();
 	}
 	
 	
@@ -104,19 +75,15 @@ public class PhrasesPane extends VBox implements Initializable
 	
 	/**
 	 * Povoa as abas dos grupos de frases.
-	 * 
-	 * @param phraseGroups A nova lista do grupo de frases.
-	 * 
-	 * @throws IOException Quando a aba não pode ser criada.
 	 */
-	public void populateTabs(ObservableList<PhraseGroup> phraseGroups) throws IOException
+	public void populateTabs()
 	{
 		tabs.clear();
-		
-		for (PhraseGroup group : phraseGroups)
-		{
-			tabs.add(PhraseGroupTabs.makeTab(group));
-		}
+		tabs.addAll(
+				phraseGroups.stream()
+					.map(group -> PhraseGroupTabs.makeTab(group))
+					.toList()
+		);
 	}
 	
 	
@@ -148,11 +115,9 @@ public class PhrasesPane extends VBox implements Initializable
 	
 	/**
 	 * Ação ao clicar no botão "Add phrase group".
-	 * 
-	 * @throws IOException Quando o arquivo da tela não é encontrado.
 	 */
 	@FXML
-	public void onBtnAddPhraseGroupAction() throws IOException
+	public void onBtnAddPhraseGroupAction()
 	{
 		String name = PhraseGroupTabs.makeFallbackName(tabs);
 		PhraseGroup group = new PhraseGroup(name);
@@ -160,5 +125,49 @@ public class PhrasesPane extends VBox implements Initializable
 
 		tabs.add(tab);
 		panGroups.getSelectionModel().select(tab);
+	}
+	
+	
+	/*
+	 * ===========================================================
+	 * 			*** MÉTODOS PRIVADOS ***
+	 * ===========================================================
+	 */
+	
+	/**
+	 * Inicializa as abas.
+	 */
+	private void setupTabs()
+	{
+		tabs = panGroups.getTabs();
+
+		tabs.addListener((ListChangeListener<Tab>) ev ->
+		{
+			ev.next();
+			
+			if (ev.wasAdded())
+			{
+				phraseGroups.addAll(
+						ev.getAddedSubList()
+							.stream()
+							.map(t -> (PhraseGroup) t.getUserData())
+							.filter(g -> g != null)
+							.toList()
+				);
+			}
+
+			if (ev.wasRemoved())
+			{
+				phraseGroups.removeAll(
+						ev.getRemoved()
+							.stream()
+							.map(t -> (PhraseGroup) t.getUserData())
+							.filter(g -> g != null)
+							.toList()
+				);
+			}
+		});
+		
+		panGroups.setTabDragPolicy(TabDragPolicy.REORDER);
 	}
 }

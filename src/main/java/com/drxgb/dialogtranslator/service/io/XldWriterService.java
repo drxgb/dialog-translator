@@ -1,4 +1,4 @@
-package com.drxgb.dialogtranslator.service;
+package com.drxgb.dialogtranslator.service.io;
 
 import java.io.OutputStream;
 import java.util.List;
@@ -31,7 +31,7 @@ public class XldWriterService extends WriterService
 	/**
 	 * Salva o arquivo XLD.
 	 * 
-	 * @see com.drxgb.dialogtranslator.service.WriterService#write(java.io.OutputStream)
+	 * @see com.drxgb.dialogtranslator.service.io.WriterService#write(java.io.OutputStream)
 	 */
 	@Override
 	public void write(OutputStream input)

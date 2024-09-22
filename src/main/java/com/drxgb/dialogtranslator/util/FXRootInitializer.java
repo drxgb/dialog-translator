@@ -20,16 +20,22 @@ public abstract class FXRootInitializer
 	 * 
 	 * @param root O elemento elegível a ser raiz.
 	 * @param fxmlPath O caminho do arquivo FXML a ser carregado.
-	 * 
-	 * @throws IOException Quando o arquivo FXML não é encontrado.
 	 */
-	public static void init(Object root, String fxmlPath) throws IOException
+	public static void init(Object root, String fxmlPath)
 	{
-		ViewLoader viewLoader = App.getInstance().getViewLoader();
-		FXMLLoader fxmlLoader = viewLoader.getFXMLLoader(fxmlPath);
-		
-		fxmlLoader.setRoot(root);
-		fxmlLoader.setController(root);
-		fxmlLoader.load();
+		try
+		{
+			ViewLoader viewLoader = App.getInstance().getViewLoader();
+			FXMLLoader fxmlLoader = viewLoader.getFXMLLoader(fxmlPath);
+			
+			fxmlLoader.setRoot(root);
+			fxmlLoader.setController(root);
+			fxmlLoader.load();
+		}
+		catch (IOException e)
+		{
+			// TODO Janela de erro - Raiz não encontrada.
+			e.printStackTrace();
+		}
 	}
 }

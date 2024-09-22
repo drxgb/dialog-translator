@@ -71,7 +71,7 @@ public class PhraseCell extends DraggableListCell<Phrase>
 			if (option.get() == ButtonType.YES)
 			{
 				list.getItems().remove(phrase);
-				App.getInstance().getFileManager().setUnsavedChanges(true);
+				App.getInstance().getFileChangeObserver().update(true);
 			}
 		});
 		

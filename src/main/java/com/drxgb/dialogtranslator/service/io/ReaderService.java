@@ -1,18 +1,19 @@
-package com.drxgb.dialogtranslator.service;
+package com.drxgb.dialogtranslator.service.io;
 
-import java.io.OutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import com.drxgb.dialogtranslator.model.Language;
 import com.drxgb.dialogtranslator.model.PhraseGroup;
 
 /**
- * Responsável por escrever em um fluxo de dados.
+ * Responsável por carregar fluxo de dados.
  * 
  * @author Dr.XGB
  * @version 1.0.0
  */
-public abstract class WriterService
+public abstract class ReaderService
 {
 	/*
 	 * ===========================================================
@@ -31,12 +32,12 @@ public abstract class WriterService
 	 */
 
 	/**
-	 * Cria o escritor.
+	 * Cria o leitor.
 	 * 
 	 * @param languages Conjunto de idiomas.
 	 * @param groups Conjunto de grupos de frases.
 	 */
-	public WriterService(List<Language> languages, List<PhraseGroup> groups)
+	public ReaderService(List<Language> languages, List<PhraseGroup> groups)
 	{
 		this.languages = languages;
 		this.groups = groups;
@@ -50,11 +51,13 @@ public abstract class WriterService
 	 */
 	
 	/**
-	 * Realiza a escrita no fluxo de dados.
+	 * Realiza a leitura do fluxo de dados.
 	 * 
-	 * @param input O fluxo de dados a ser escrito.
+	 * @param input O fluxo de dados a ser lido.
+	 * 
+	 * @throws IOException Quando não for possível ler o arquivo. 
 	 */
-	public abstract void write(OutputStream input);
+	public abstract void read(InputStream input) throws IOException;
 
 
 	/*
