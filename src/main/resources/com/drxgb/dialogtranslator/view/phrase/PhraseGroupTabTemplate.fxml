@@ -61,7 +61,7 @@
                   </Button>
                </children>
             </HBox>
-            <SplitPane dividerPositions="0.3" minWidth="-Infinity" prefWidth="320.0">
+            <SplitPane fx:id="spltPhrase" dividerPositions="0.3" minWidth="-Infinity" prefWidth="320.0">
                <items>
                   <TitledPane collapsible="false" maxHeight="1.7976931348623157E308" text="Phrases list">
                      <content>

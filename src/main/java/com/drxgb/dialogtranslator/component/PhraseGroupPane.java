@@ -2,6 +2,7 @@ package com.drxgb.dialogtranslator.component;
 
 import java.net.URL;
 import java.util.Optional;
+import java.util.Properties;
 import java.util.ResourceBundle;
 
 import com.drxgb.dialogtranslator.App;
@@ -14,6 +15,7 @@ import com.drxgb.dialogtranslator.service.Container;
 import com.drxgb.dialogtranslator.util.Alerts;
 import com.drxgb.dialogtranslator.util.FXRootInitializer;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -25,7 +27,10 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.SplitPane;
+import javafx.scene.control.SplitPane.Divider;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
@@ -42,12 +47,26 @@ public class PhraseGroupPane extends ScrollPane implements Initializable
 {
 	/*
 	 * ===========================================================
+	 * 			*** CONSTANTES ***
+	 * ===========================================================
+	 */
+	
+	/**
+	 * A chave da propriedade da configuração que define o tamanho
+	 * padrão para as divisórias do formulário da frase.
+	 */
+	private static final String DIVIDER_SIZE_KEY = "phraseGroupDividerSize";
+	
+	
+	/*
+	 * ===========================================================
 	 * 			*** ATRIBUTOS ***
 	 * ===========================================================
 	 */
 	
 	@FXML public VBox vbTranslation;
 	@FXML public Button btnNewPhrase;
+	@FXML public SplitPane spltPhrase;
 	@FXML public TextField txtGroupName;
 	@FXML public TextField txtFilterPhrases;
 	@FXML public TextField txtPhraseKey;
@@ -60,6 +79,8 @@ public class PhraseGroupPane extends ScrollPane implements Initializable
 	private Tab tab;
 	private PhraseGroup phraseGroup;
 	private ObservableList<Phrase> phrases;
+	
+	private boolean resizing;
 	
 	
 	/*
@@ -89,6 +110,7 @@ public class PhraseGroupPane extends ScrollPane implements Initializable
 		this.phraseGroup = phraseGroup;
 		this.tab = tab;
 		this.phrases = phrases;
+		this.resizing = false;
 
 		FXRootInitializer.init(this, "phrase/PhraseGroupTabTemplate");
 	}
@@ -110,6 +132,7 @@ public class PhraseGroupPane extends ScrollPane implements Initializable
 		setupNewPhraseButton();
 		setupGroupNameTextField();
 		setupRemoveGroupButton();
+		setupPhraseSplitPane();
 		setupPhrasesListView();
 		setupPhraseKeyInput();
 		setupMasterTextInput();
@@ -163,6 +186,17 @@ public class PhraseGroupPane extends ScrollPane implements Initializable
 		{
 			txtMasterText.setText(phrase.getTexts().get(master));
 		}
+	}
+	
+	
+	/**
+	 * Atualiza o tamanho da divisória do formulário da frase.
+	 * 
+	 * @param size O novo tamanho da divisória.
+	 */
+	public void updateDividerSize(Number size)
+	{
+		spltPhrase.getDividers().getFirst().setPosition((Double) size);
 	}
 	
 	
@@ -269,6 +303,43 @@ public class PhraseGroupPane extends ScrollPane implements Initializable
 			{
 				tab.getTabPane().getTabs().remove(tab);
 			}
+		});
+	}
+	
+	
+	/**
+	 * Inicializa a barra divisória entre a lista de frases
+	 * e o campo de propriedades da frase.
+	 */
+	private void setupPhraseSplitPane()
+	{		
+		Properties settings = app.getSettings();
+		Divider divider = spltPhrase.getDividers().getFirst();
+		
+		if (settings.containsKey(DIVIDER_SIZE_KEY))
+		{
+			divider.setPosition(Double.parseDouble(settings.getProperty(DIVIDER_SIZE_KEY)));
+		}
+
+		divider.positionProperty().addListener((obs, oldVal, newVal) ->
+		{
+			if (! resizing)
+			{
+				TabPane tabPane = (TabPane) getParent().getParent();
+				
+				tabPane.getTabs()
+					.stream()
+					.filter(t -> t != tab)
+					.forEach(t -> ((PhraseGroupPane) t.getContent()).updateDividerSize(newVal));
+				
+				settings.setProperty(DIVIDER_SIZE_KEY, newVal.toString());
+			}
+		});
+		
+		app.getScene().addPreLayoutPulseListener(() ->
+		{
+			resizing = true;
+			Platform.runLater(() -> resizing = false);
 		});
 	}
 	
