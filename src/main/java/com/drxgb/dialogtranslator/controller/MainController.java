@@ -1,7 +1,6 @@
 package com.drxgb.dialogtranslator.controller;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -16,11 +15,13 @@ import com.drxgb.dialogtranslator.service.Container;
 import com.drxgb.dialogtranslator.service.io.XldReaderService;
 import com.drxgb.dialogtranslator.service.manager.FileManager;
 import com.drxgb.dialogtranslator.service.manager.StyleManager;
+import com.drxgb.dialogtranslator.util.Alerts;
 import com.drxgb.dialogtranslator.util.DialogStyleDecorator;
 import com.drxgb.dialogtranslator.util.RecentFiles;
 import com.drxgb.dialogtranslator.util.StyleDecorator;
 import com.drxgb.javafxutils.FileChooserFactory;
 import com.drxgb.util.PropertiesManager;
+import com.drxgb.util.Report;
 import com.drxgb.util.ValueHandler;
 
 import javafx.collections.ObservableList;
@@ -588,15 +589,10 @@ public class MainController implements Initializable
 			app.getTitleManager().setTitle(filename);
 			app.getFileChangeObserver().update(false);
 		}
-		catch (FileNotFoundException e)
+		catch (Throwable t)
 		{
-			// TODO Janela de erro - Arquivo não encontrado.
-			e.printStackTrace();
-		}
-		catch (IOException e)
-		{
-			// TODO Janela de erro - Não foi possível ler o arquivo.
-			e.printStackTrace();
+			Report.writeErrorLog(t);
+			Alerts.showError(t);
 		}
 	}
 }

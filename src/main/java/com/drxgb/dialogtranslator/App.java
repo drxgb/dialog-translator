@@ -15,7 +15,9 @@ import com.drxgb.dialogtranslator.service.ViewLoader;
 import com.drxgb.dialogtranslator.service.manager.FileManager;
 import com.drxgb.dialogtranslator.service.manager.StageTitleManager;
 import com.drxgb.dialogtranslator.service.manager.StyleManager;
+import com.drxgb.dialogtranslator.util.Alerts;
 import com.drxgb.util.PropertiesManager;
+import com.drxgb.util.Report;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -157,8 +159,16 @@ public class App extends Application
 	 */
 	public static void main(String[] args)
 	{
-		Locale.setDefault(Locale.US);
-		launch();
+		try
+		{
+			Locale.setDefault(Locale.US);
+			launch();
+		}
+		catch (Throwable t)
+		{
+			Report.writeErrorLog(t);
+			Alerts.showError(t);
+		}
 	}
 	
 	
@@ -289,7 +299,7 @@ public class App extends Application
 	 */
 	public Stage getStage()
 	{
-		return (Stage) (getScene().getWindow());
+		return scene != null ? (Stage) (scene.getWindow()) : null;
 	}
 	
 	

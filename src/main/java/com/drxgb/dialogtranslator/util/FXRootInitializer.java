@@ -1,9 +1,8 @@
 package com.drxgb.dialogtranslator.util;
 
-import java.io.IOException;
-
 import com.drxgb.dialogtranslator.App;
 import com.drxgb.dialogtranslator.service.ViewLoader;
+import com.drxgb.util.Report;
 
 import javafx.fxml.FXMLLoader;
 
@@ -32,10 +31,10 @@ public abstract class FXRootInitializer
 			fxmlLoader.setController(root);
 			fxmlLoader.load();
 		}
-		catch (IOException e)
+		catch (Throwable t)
 		{
-			// TODO Janela de erro - Raiz não encontrada.
-			e.printStackTrace();
+			Report.writeErrorLog(t);
+			Alerts.showError(t, true);
 		}
 	}
 }
