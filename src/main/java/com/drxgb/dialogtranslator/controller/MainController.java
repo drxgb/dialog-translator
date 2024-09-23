@@ -164,7 +164,11 @@ public class MainController implements Initializable
 	{
 		if (saveConfirmed() != ButtonType.CANCEL)
 		{
-			// TODO Novo arquivo.
+			Container container = app.getContainer();
+			
+			container.getLanguages().clear();
+			container.getGroups().clear();
+			reloadMainView(null);
 		}
 	}
 	
@@ -570,6 +574,21 @@ public class MainController implements Initializable
 	
 	
 	/**
+	 * Recarrega a tela principal.
+	 * 
+	 * @param title O novo título da janela.
+	 */
+	private void reloadMainView(String title)
+	{
+		PhrasesPane phrasesPane = (PhrasesPane) viewModes.getFirst();
+		
+		phrasesPane.populateTabs();
+		app.getTitleManager().setTitle(title);
+		app.getFileChangeObserver().update(false);
+	}
+	
+	
+	/**
 	 * Carrega o arquivo solicitado.
 	 * 
 	 * @param filename O nome do arquivo.
@@ -579,15 +598,11 @@ public class MainController implements Initializable
 		try
 		{
 			FileManager fileManager = app.getFileManager();
-			Container c = app.getContainer();
-			PhrasesPane phrasesPane = (PhrasesPane) viewModes.getFirst();
+			Container c = app.getContainer();			
 
 			fileManager.setReader(new XldReaderService(c.getLanguages(), c.getGroups()));
 			fileManager.load(filename);
-			phrasesPane.populateTabs();
-			
-			app.getTitleManager().setTitle(filename);
-			app.getFileChangeObserver().update(false);
+			reloadMainView(filename);
 		}
 		catch (Throwable t)
 		{
