@@ -33,6 +33,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
@@ -81,8 +82,10 @@ public class MainController implements Initializable
 	@FXML public RadioMenuItem mnitPhrases;
 	@FXML public RadioMenuItem mnitLanguages;
 	
+	
 	// Base
 	@FXML public AnchorPane panMain;
+	@FXML public Button btnSave;
 	@FXML public ToggleGroup viewMode;
 	@FXML public ToggleButton btnPhrases;
 	@FXML public ToggleButton btnLanguages;
@@ -179,7 +182,7 @@ public class MainController implements Initializable
 	@FXML
 	public void onMnitOpenAction()
 	{
-		if (saveConfirmed() == ButtonType.CANCEL)
+		if (saveConfirmed() != ButtonType.CANCEL)
 		{			
 			Stage stage = app.getStage();
 			Properties settings = app.getSettings();
@@ -444,6 +447,7 @@ public class MainController implements Initializable
 	private void setupFileChangeObserver()
 	{
 		app.getFileChangeObserver().subscribe(changed -> mnitSave.setDisable(! changed));
+		app.getFileChangeObserver().subscribe(changed -> btnSave.setDisable(! changed));
 	}
 	
 	

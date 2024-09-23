@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
@@ -13,7 +14,7 @@
    <children>
       <HBox alignment="TOP_RIGHT">
          <children>
-            <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onBtnNewLanguageAction" prefHeight="36.0" prefWidth="160.0" styleClass="btn-primary" text="New Language">
+            <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onBtnNewLanguageAction" prefHeight="36.0" prefWidth="160.0" text="New Language">
                <graphic>
                   <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -21,6 +22,10 @@
                      </image>
                   </ImageView>
                </graphic>
+               <styleClass>
+                  <String fx:value="btn" />
+                  <String fx:value="btn-primary" />
+               </styleClass>
             </Button>
          </children>
          <padding>

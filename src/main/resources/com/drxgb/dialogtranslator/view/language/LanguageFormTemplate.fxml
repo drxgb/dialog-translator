@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
@@ -33,22 +34,30 @@
       <CheckBox fx:id="chkMaster" mnemonicParsing="false" text="Set as Master language" />
       <HBox alignment="BOTTOM_RIGHT" spacing="8.0">
          <children>
-            <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onBtnCancelAction" prefWidth="80.0" styleClass="btn-remove" text="Cancel">
+            <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onBtnCancelAction" prefWidth="80.0" text="Cancel">
                <graphic>
                   <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../icon/cancel.png" />
                      </image>
                   </ImageView>
-               </graphic></Button>
-            <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onBtnSaveAction" prefWidth="80.0" styleClass="btn-primary" text="Save">
+               </graphic>
+               <styleClass>
+                  <String fx:value="btn" />
+                  <String fx:value="btn-remove" />
+               </styleClass></Button>
+            <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onBtnSaveAction" prefWidth="80.0" text="Save">
                <graphic>
                   <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../icon/ok.png" />
                      </image>
                   </ImageView>
-               </graphic></Button>
+               </graphic>
+               <styleClass>
+                  <String fx:value="btn" />
+                  <String fx:value="btn-primary" />
+               </styleClass></Button>
          </children>
       </HBox>
    </children>

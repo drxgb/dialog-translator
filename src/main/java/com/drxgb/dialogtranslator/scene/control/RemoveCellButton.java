@@ -26,6 +26,7 @@ public class RemoveCellButton extends Button
 	public RemoveCellButton(String text, Node graphic)
 	{
 		super(text, graphic);
+		getStyleClass().add("btn");
 		getStyleClass().add("btn-cell-remove");
 	}
 	
