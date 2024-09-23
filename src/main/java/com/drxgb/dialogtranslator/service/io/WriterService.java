@@ -1,5 +1,6 @@
 package com.drxgb.dialogtranslator.service.io;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 
@@ -52,9 +53,11 @@ public abstract class WriterService
 	/**
 	 * Realiza a escrita no fluxo de dados.
 	 * 
-	 * @param input O fluxo de dados a ser escrito.
+	 * @param output O fluxo de dados a ser escrito.
+	 * 
+	 * @throws IOException Quando não é possível escrever os dados. 
 	 */
-	public abstract void write(OutputStream input);
+	public abstract void write(OutputStream output) throws IOException;
 
 
 	/*

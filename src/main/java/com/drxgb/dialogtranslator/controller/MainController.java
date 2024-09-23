@@ -13,6 +13,7 @@ import com.drxgb.dialogtranslator.component.LanguagesPane;
 import com.drxgb.dialogtranslator.component.PhrasesPane;
 import com.drxgb.dialogtranslator.service.Container;
 import com.drxgb.dialogtranslator.service.io.XldReaderService;
+import com.drxgb.dialogtranslator.service.io.XldWriterService;
 import com.drxgb.dialogtranslator.service.manager.FileManager;
 import com.drxgb.dialogtranslator.service.manager.StyleManager;
 import com.drxgb.dialogtranslator.util.Alerts;
@@ -65,6 +66,11 @@ public class MainController implements Initializable
 	 * Chave do último caminho do caminho aberto nas configurações.
 	 */
 	private static final String OPEN_PATH_KEY = "lastOpenedPath";
+	
+	/**
+	 * Chave do último caminho do caminho salvo nas configurações.
+	 */
+	private static final String SAVE_PATH_KEY = "lastSavedPath";
 	
 	
 	/*
@@ -183,7 +189,7 @@ public class MainController implements Initializable
 	public void onMnitOpenAction()
 	{
 		if (saveConfirmed() != ButtonType.CANCEL)
-		{			
+		{
 			Stage stage = app.getStage();
 			Properties settings = app.getSettings();
 			String path;
@@ -194,14 +200,14 @@ public class MainController implements Initializable
 					"Dialog files",
 					settings.getProperty(OPEN_PATH_KEY),
 					app.getSupportedFileExtensionsList()
-					);
+			);
 			
 			if (file != null)
 			{
 				path = file.getAbsolutePath();
 				settings.setProperty(OPEN_PATH_KEY, file.getParent());
-				addToRecentFilesList(path);
 				loadFile(path);
+				addToRecentFilesList(path);
 			}
 		}
 	}
@@ -219,7 +225,7 @@ public class MainController implements Initializable
 			return;
 		}
 		
-		// TODO Salvar arquivo.
+		saveFile(app.getTitleManager().getTitle());
 	}
 	
 	
@@ -229,7 +235,26 @@ public class MainController implements Initializable
 	@FXML
 	public void onMnitSaveAsAction()
 	{
-		// TODO Salvar arquivo como...
+		Stage stage = app.getStage();
+		Properties settings = app.getSettings();
+		String path;
+		
+		File file = FileChooserFactory.saveFile(
+				stage,
+				"Save file",
+				"Dialog files",
+				settings.getProperty(SAVE_PATH_KEY),
+				app.getSupportedFileExtensionsList()
+		);
+		
+		if (file != null)
+		{
+			path = file.getAbsolutePath();
+			settings.setProperty(SAVE_PATH_KEY, file.getParent());
+			saveFile(path);
+			addToRecentFilesList(path);
+			app.getTitleManager().setTitle(path);
+		}
 	}
 	
 	
@@ -607,6 +632,30 @@ public class MainController implements Initializable
 			fileManager.setReader(new XldReaderService(c.getLanguages(), c.getGroups()));
 			fileManager.load(filename);
 			reloadMainView(filename);
+		}
+		catch (Throwable t)
+		{
+			Report.writeErrorLog(t);
+			Alerts.showError(t);
+		}
+	}
+	
+	
+	/**
+	 * Salva o arquivo solicitado.
+	 * 
+	 * @param filename O nome do arquivo.
+	 */
+	private void saveFile(String filename)
+	{
+		try
+		{
+			FileManager fileManager = app.getFileManager();
+			Container c = app.getContainer();			
+
+			fileManager.setWriter(new XldWriterService(c.getLanguages(), c.getGroups()));
+			fileManager.save(filename);
+			app.getFileChangeObserver().update(false);
 		}
 		catch (Throwable t)
 		{

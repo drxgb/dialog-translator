@@ -46,7 +46,7 @@
 		<dependency>
 			<groupId>com.drxgb</groupId>
 			<artifactId>utils</artifactId>
-			<version>1.10.3</version>
+			<version>1.10.4</version>
 		</dependency>
 
 		<!-- XGB JavaFX Utils -->
