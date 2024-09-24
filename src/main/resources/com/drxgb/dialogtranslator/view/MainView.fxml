@@ -11,6 +11,7 @@
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.input.KeyCodeCombination?>
@@ -152,6 +153,9 @@
                      </image>
                   </ImageView>
                </graphic>
+               <tooltip>
+                  <Tooltip text="New" />
+               </tooltip>
             </Button>
             <Button mnemonicParsing="false" onAction="#onMnitOpenAction">
                <graphic>
@@ -161,6 +165,9 @@
                      </image>
                   </ImageView>
                </graphic>
+               <tooltip>
+                  <Tooltip text="Open" />
+               </tooltip>
             </Button>
             <Button fx:id="btnSave" disable="true" mnemonicParsing="false" onAction="#onMnitSaveAction">
                <graphic>
@@ -170,6 +177,9 @@
                      </image>
                   </ImageView>
                </graphic>
+               <tooltip>
+                  <Tooltip text="Save" />
+               </tooltip>
             </Button>
             <Separator orientation="VERTICAL">
                <padding>
@@ -183,6 +193,9 @@
                      </image>
                   </ImageView>
                </graphic>
+               <tooltip>
+                  <Tooltip text="About" />
+               </tooltip>
             </Button>
          </children>
          <padding>

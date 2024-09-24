@@ -111,8 +111,8 @@ public abstract class DraggableListCell<T extends Serializable> extends ListCell
 				final int sourceIndex = items.indexOf(source);
 				final int targetIndex = items.indexOf(target);
 				
-				items.set(sourceIndex, target);
-				items.set(targetIndex, source);
+				items.remove(targetIndex);
+				items.add(sourceIndex, target);
 				getListView().getSelectionModel().select(sourceIndex);
 
 				success = true;
