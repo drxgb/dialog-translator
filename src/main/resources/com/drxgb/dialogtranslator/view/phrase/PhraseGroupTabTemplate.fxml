@@ -76,7 +76,7 @@
                      <content>
                         <VBox spacing="10.0">
                            <children>
-                              <TextField fx:id="txtFilterPhrase" promptText="Filter..." />
+                              <TextField fx:id="txtFilterPhrases" promptText="Filter..." />
                               <ScrollPane fitToHeight="true" fitToWidth="true" VBox.vgrow="ALWAYS">
                                  <content>
                                     <ListView fx:id="lstPhrases" />

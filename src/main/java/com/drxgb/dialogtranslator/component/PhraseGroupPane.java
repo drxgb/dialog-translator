@@ -79,6 +79,7 @@ public class PhraseGroupPane extends ScrollPane implements Initializable
 	private Tab tab;
 	private PhraseGroup phraseGroup;
 	private ObservableList<Phrase> phrases;
+	private ObservableList<Phrase> filteredPhrases;
 	
 	private boolean resizing;
 	
@@ -133,6 +134,7 @@ public class PhraseGroupPane extends ScrollPane implements Initializable
 		setupGroupNameTextField();
 		setupRemoveGroupButton();
 		setupPhraseSplitPane();
+		setupFilters();
 		setupPhrasesListView();
 		setupPhraseKeyInput();
 		setupMasterTextInput();
@@ -216,6 +218,7 @@ public class PhraseGroupPane extends ScrollPane implements Initializable
 		
 		phrases.add(phrase);
 		lstPhrases.getSelectionModel().selectLast();
+		txtFilterPhrases.clear();
 		updateLanguagesComboBox();
 	}
 	
@@ -340,6 +343,36 @@ public class PhraseGroupPane extends ScrollPane implements Initializable
 		{
 			resizing = true;
 			Platform.runLater(() -> resizing = false);
+		});
+	}
+	
+	
+	/**
+	 * Inicializa o filtro de pesquisa das frases.
+	 */
+	private void setupFilters()
+	{		
+		txtFilterPhrases.textProperty().addListener((obs, oldVal, newVal) ->
+		{
+			String regex = new StringBuilder()
+					.append(".*(")
+					.append(newVal)
+					.append(").*")
+					.toString();
+			
+			if (newVal.isEmpty())
+			{
+				lstPhrases.setItems(phrases);
+			}
+			else
+			{
+				filteredPhrases = FXCollections.observableArrayList(
+						phrases.stream()
+						.filter(phrase -> phrase.getKey().matches(regex))
+						.toList()
+						);
+				lstPhrases.setItems(filteredPhrases);
+			}
 		});
 	}
 	

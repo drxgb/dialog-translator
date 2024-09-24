@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.drxgb</groupId>
 	<artifactId>dialogtranslator</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>2.0.0</version>
 	<name>XGB's Dialog Translator</name>
 	<description>
 		Utilitário para mapear os diálogos de acordo com o idioma selecionado
