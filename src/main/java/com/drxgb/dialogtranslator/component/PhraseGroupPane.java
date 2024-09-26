@@ -24,6 +24,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
@@ -35,6 +36,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.util.Callback;
 
 /**
@@ -72,6 +74,7 @@ public class PhraseGroupPane extends ScrollPane implements Initializable
 	@FXML public TextField txtPhraseKey;
 	@FXML public TextArea txtMasterText;
 	@FXML public TextArea txtTranslatedText;
+	@FXML public Label lblPhraseError;
 	@FXML public Button btnRemoveGroup;
 	@FXML public ComboBox<Language> cboLanguages;
 	@FXML public ListView<Phrase> lstPhrases;
@@ -397,9 +400,13 @@ public class PhraseGroupPane extends ScrollPane implements Initializable
 
 			if (newVal != null)
 			{
-				txtPhraseKey.setText(newVal.getKey());
-				txtMasterText.setText(newVal.getTexts().get(master));
-				txtTranslatedText.setText(newVal.getTexts().get(translated));
+				String phraseKey = newVal.getKey();
+				String masterText = newVal.getTexts().get(master);
+				String translatedText = newVal.getTexts().get(translated);
+				
+				txtPhraseKey.setText(phraseKey != null ? phraseKey : "");
+				txtMasterText.setText(masterText != null ? masterText : "");
+				txtTranslatedText.setText(translatedText != null ? translatedText : "");
 			}
 		});
 		
@@ -425,6 +432,8 @@ public class PhraseGroupPane extends ScrollPane implements Initializable
 				phrase.setKey(newVal);
 				lstPhrases.refresh();
 			}
+			
+			ensureNotEmptyPhraseKey(! (newVal == null || newVal.isBlank()));
 		});
 	}
 	
@@ -442,7 +451,6 @@ public class PhraseGroupPane extends ScrollPane implements Initializable
 			if (phrase != null)
 			{
 				phrase.getTexts().put(master, newVal);
-				//app.getFileChangeObserver().update(true);
 			}
 		});
 	}
@@ -477,14 +485,13 @@ public class PhraseGroupPane extends ScrollPane implements Initializable
 	private void setupTranslatedTextInput()
 	{
 		txtTranslatedText.textProperty().addListener((obs, oldVal, newVal) -> 
-		{
+		{			
 			Phrase phrase = (Phrase) txtPhraseKey.getUserData();
 			Language language = cboLanguages.getValue();
-			
+
 			if (phrase != null)
 			{
 				phrase.getTexts().put(language, newVal);
-				//app.getFileChangeObserver().update(true);
 			}
 		});
 	}
@@ -504,5 +511,28 @@ public class PhraseGroupPane extends ScrollPane implements Initializable
 			.append(phrases.size() + 1);
 		
 		return sb.toString();
+	}
+	
+	
+	/**
+	 * Realiza a certificação do campo da chave da frase
+	 * para válido.
+	 * 
+	 * @param valid Se o campo está válido.
+	 */
+	private void ensureNotEmptyPhraseKey(boolean valid)
+	{
+		if (valid)
+		{
+			txtPhraseKey.getStyleClass().remove("error");
+		}
+		else
+		{
+			txtPhraseKey.getStyleClass().add("error");
+		}
+
+		lblPhraseError.setText(valid ? "" : "This field cannot be empty");
+		lblPhraseError.setTextFill(Color.RED);
+		lblPhraseError.setVisible(! valid);
 	}
 }

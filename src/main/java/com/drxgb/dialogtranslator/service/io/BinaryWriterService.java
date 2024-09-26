@@ -135,6 +135,11 @@ public abstract class BinaryWriterService extends WriterService
 	 */
 	protected byte[] getBytesFromString(String data)
 	{
+		if (data == null)
+		{
+			data = "";
+		}
+		
 		return (data + "\0").getBytes(charset);
 	}
 	

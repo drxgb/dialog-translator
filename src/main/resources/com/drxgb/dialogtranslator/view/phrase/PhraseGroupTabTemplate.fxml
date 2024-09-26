@@ -94,6 +94,7 @@
                                  <children>
                                     <Label text="Phrase key:" />
                                     <TextField fx:id="txtPhraseKey" onKeyTyped="#onTextTypedAction" />
+                                    <Label fx:id="lblPhraseError" textFill="RED" visible="false" />
                                  </children>
                               </VBox>
                               <VBox>

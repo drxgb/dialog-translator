@@ -136,7 +136,9 @@ public class LanguageCell extends DraggableListCell<Language>
 	 */
 	private Button makeRemoveButton(Language language)
 	{
+		final App app = App.getInstance();
 		final ListView<Language> list = getListView();
+
 		Button btnRemove = new RemoveCellButton();
 
 		btnRemove.setOnAction(ev ->
@@ -146,7 +148,12 @@ public class LanguageCell extends DraggableListCell<Language>
 			if (option.get() == ButtonType.YES)
 			{
 				list.getItems().remove(language);
-				App.getInstance().getFileChangeObserver().update(true);
+				app.getContainer().getGroups().forEach(group ->
+				{
+					group.getPhrases().forEach(p -> p.getTexts().remove(language));
+				});
+
+				app.getFileChangeObserver().update(true);
 				LanguageForms.checkIfHasMasterLanguages(list);
 			}
 		});

@@ -102,6 +102,9 @@ public class MainController implements Initializable
 	// Arquivos recentes
 	private List<String> recentFiles;
 	
+	// Dados auxiliares
+	private boolean hasErrors;
+	
 	
 	/*
 	 * ===========================================================
@@ -126,6 +129,8 @@ public class MainController implements Initializable
 	{
 		try
 		{
+			hasErrors = false;
+			
 			setupRecentFiles();
 			setupViewModes();
 			setupStyles();
@@ -155,7 +160,9 @@ public class MainController implements Initializable
 		final App app = App.getInstance();		
 		Properties settings = app.getSettings();
 		
-		if (saveConfirmed() == ButtonType.CANCEL)
+		hasErrors = false;
+		
+		if (saveConfirmed() == ButtonType.CANCEL || hasErrors)
 		{
 			ev.consume();
 			return;
@@ -546,7 +553,7 @@ public class MainController implements Initializable
 		decorator.applyStyleSheets(app.getStage().getScene().getRoot().getStylesheets());
 		decorator.applyButtonStyleClass("btn-primary");
 		
-		option = alert.showAndWait();		
+		option = alert.showAndWait();
 		
 		if (option.get() == ButtonType.YES)
 		{
@@ -637,6 +644,7 @@ public class MainController implements Initializable
 		{
 			Report.writeErrorLog(t);
 			Alerts.showError(t);
+			hasErrors = true;
 		}
 	}
 	
@@ -661,6 +669,7 @@ public class MainController implements Initializable
 		{
 			Report.writeErrorLog(t);
 			Alerts.showError(t);
+			hasErrors = true;
 		}
 	}
 }

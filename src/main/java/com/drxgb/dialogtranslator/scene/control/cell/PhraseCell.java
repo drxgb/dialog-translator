@@ -32,17 +32,32 @@ public class PhraseCell extends DraggableListCell<Phrase>
 	@Override
 	protected void updateItem(Phrase phrase, boolean empty)
 	{
+		String key;
+		boolean blank;
+		
 		super.updateItem(phrase, empty);
 		
 		if (empty || phrase == null)
 		{
 			setText(null);
 			setGraphic(null);
+			getStyleClass().remove("error");
 		}
 		else
 		{
-			setText(phrase.getKey());
+			key = phrase.getKey();
+			blank = key == null || key.isBlank();
+			setText(key);
 			setGraphic(makeRemoveButton(phrase));
+			
+			if (blank)
+			{
+				getStyleClass().add("error");
+			}
+			else
+			{
+				getStyleClass().remove("error");
+			}
 		}
 	}
 	
