@@ -74,7 +74,7 @@
                <items>
                   <TitledPane collapsible="false" maxHeight="1.7976931348623157E308" text="Phrases list">
                      <content>
-                        <VBox spacing="10.0">
+                        <VBox fx:id="vbPhrasesList" spacing="10.0">
                            <children>
                               <TextField fx:id="txtFilterPhrases" promptText="Filter..." />
                               <ScrollPane fitToHeight="true" fitToWidth="true" VBox.vgrow="ALWAYS">

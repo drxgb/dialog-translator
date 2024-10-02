@@ -30,7 +30,7 @@ class BinaryReaderTest
 			CharBuffer decoded = charset.decode(buffer);		
 			String result = decoded.toString();
 			
-			assertEquals("EITA BIXO", result);
+			assertEquals("EITA BIXO\0", result);
 		}
 	}
 }

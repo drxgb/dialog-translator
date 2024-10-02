@@ -66,6 +66,7 @@ public class PhraseGroupPane extends ScrollPane implements Initializable
 	 * ===========================================================
 	 */
 	
+	@FXML public VBox vbPhrasesList;
 	@FXML public VBox vbTranslation;
 	@FXML public Button btnNewPhrase;
 	@FXML public SplitPane spltPhrase;
@@ -174,7 +175,10 @@ public class PhraseGroupPane extends ScrollPane implements Initializable
 	 */
 	public void updateView()
 	{
-		vbTranslation.setDisable(phrases.isEmpty());
+		final boolean phrasesEmpty = phrases.isEmpty();
+		
+		vbTranslation.setDisable(phrasesEmpty);
+		vbPhrasesList.setDisable(phrasesEmpty);
 		updateLanguagesComboBox();
 	}
 	
