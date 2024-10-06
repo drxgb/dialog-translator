@@ -70,6 +70,19 @@
                      </accelerator>
                   </MenuItem>
                   <SeparatorMenuItem mnemonicParsing="false" />
+                  <Menu mnemonicParsing="false" text="Import">
+                    <items>
+                        <MenuItem fx:id="mnitImportXml" mnemonicParsing="false" onAction="#onMnitImportXmlAction" text="XML..." />
+                      <MenuItem fx:id="mnitImportJson" mnemonicParsing="false" onAction="#onMnitImportJsonAction" text="JSON..." />
+                    </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Export">
+                    <items>
+                      <MenuItem fx:id="mnitExportXml" mnemonicParsing="false" onAction="#onMnitExportXmlAction" text="XML..." />
+                        <MenuItem fx:id="mnitExportJson" mnemonicParsing="false" onAction="#onMnitExportJsonAction" text="JSON..." />
+                    </items>
+                  </Menu>
+                  <SeparatorMenuItem mnemonicParsing="false" />
               <MenuItem mnemonicParsing="false" onAction="#onMnitCloseAction" text="Close">
                      <accelerator>
                         <KeyCodeCombination alt="DOWN" code="F4" control="UP" meta="UP" shift="UP" shortcut="UP" />

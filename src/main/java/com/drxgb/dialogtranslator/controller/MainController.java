@@ -3,6 +3,7 @@ package com.drxgb.dialogtranslator.controller;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
@@ -12,8 +13,13 @@ import com.drxgb.dialogtranslator.App;
 import com.drxgb.dialogtranslator.component.LanguagesPane;
 import com.drxgb.dialogtranslator.component.PhrasesPane;
 import com.drxgb.dialogtranslator.service.Container;
+import com.drxgb.dialogtranslator.service.io.FileType;
+import com.drxgb.dialogtranslator.service.io.ReaderService;
+import com.drxgb.dialogtranslator.service.io.WriterService;
 import com.drxgb.dialogtranslator.service.io.XldReaderService;
 import com.drxgb.dialogtranslator.service.io.XldWriterService;
+import com.drxgb.dialogtranslator.service.io.XmlReaderService;
+import com.drxgb.dialogtranslator.service.io.XmlWriterService;
 import com.drxgb.dialogtranslator.service.manager.FileManager;
 import com.drxgb.dialogtranslator.service.manager.StyleManager;
 import com.drxgb.dialogtranslator.util.Alerts;
@@ -52,7 +58,7 @@ import javafx.stage.WindowEvent;
  * Controlador da janela principal da aplicação.
  * 
  * @author Dr.XGB
- * @version 1.0.0
+ * @version 1.0.1
  */
 public class MainController implements Initializable
 {
@@ -63,14 +69,24 @@ public class MainController implements Initializable
 	 */
 	
 	/**
-	 * Chave do último caminho do caminho aberto nas configurações.
+	 * Chave do último caminho aberto nas configurações.
 	 */
 	private static final String OPEN_PATH_KEY = "lastOpenedPath";
 	
 	/**
-	 * Chave do último caminho do caminho salvo nas configurações.
+	 * Chave do último caminho salvo nas configurações.
 	 */
 	private static final String SAVE_PATH_KEY = "lastSavedPath";
+
+	/**
+	 * Chave do último caminho importado nas configurações.
+	 */
+	private static final String IMPORT_PATH_KEY = "lastImportedPath";
+	
+	/**
+	 * Chave do último caminho exportado nas configurações.
+	 */
+	private static final String EXPORT_PATH_KEY = "lastExportedPath";
 	
 	
 	/*
@@ -213,7 +229,8 @@ public class MainController implements Initializable
 			{
 				path = file.getAbsolutePath();
 				settings.setProperty(OPEN_PATH_KEY, file.getParent());
-				loadFile(path);
+				loadFile(path, makeReader(FileType.XLD));
+				reloadMainView(path);
 				addToRecentFilesList(path);
 			}
 		}
@@ -225,14 +242,14 @@ public class MainController implements Initializable
 	 */
 	@FXML
 	public void onMnitSaveAction()
-	{		
+	{
 		if (app.getTitleManager().isUntitled())
 		{
 			onMnitSaveAsAction();
 			return;
 		}
 		
-		saveFile(app.getTitleManager().getTitle());
+		saveFile(app.getTitleManager().getTitle(), makeWriter(FileType.XLD));
 	}
 	
 	
@@ -258,10 +275,95 @@ public class MainController implements Initializable
 		{
 			path = file.getAbsolutePath();
 			settings.setProperty(SAVE_PATH_KEY, file.getParent());
-			saveFile(path);
+			saveFile(path, makeWriter(FileType.XLD));
 			addToRecentFilesList(path);
 			app.getTitleManager().setTitle(path);
 		}
+	}
+	
+	
+	/**
+	 * Ação ao clicar no item de menu "Import > XML..."
+	 */
+	@FXML
+	public void onMnitImportXmlAction()
+	{
+		if (saveConfirmed() != ButtonType.CANCEL)
+		{
+			Stage stage = app.getStage();
+			Properties settings = app.getSettings();
+			List<String> extensions = new ArrayList<>();
+			String path;
+			File file;
+			
+			extensions.add("*.xml");
+			file = FileChooserFactory.openSingleFile(
+					stage,
+					"Import file from XML",
+					"XML files",
+					settings.getProperty(IMPORT_PATH_KEY),
+					extensions
+			);
+			
+			if (file != null)
+			{
+				path = file.getAbsolutePath();
+				settings.setProperty(IMPORT_PATH_KEY, file.getParent());
+				loadFile(path, makeReader(FileType.XML));
+				reloadMainView(null, true);
+			}
+		}
+	}
+	
+	
+	/**
+	 * Ação ao clicar no item de menu "Import > JSON..."
+	 */
+	@FXML
+	public void onMnitImportJsonAction()
+	{
+		// TODO: Importar de JSON.
+	}
+	
+	
+	/**
+	 * Ação ao clicar no item de menu "Export > XML..."
+	 */
+	@FXML
+	public void onMnitExportXmlAction()
+	{
+		Stage stage = app.getStage();
+		Properties settings = app.getSettings();
+		List<String> extensions = new ArrayList<>();
+		String path;
+		File file;
+		
+		extensions.add("*.xml");
+		file = FileChooserFactory.saveFile(
+				stage,
+				"Export file to XML",
+				"XML files",
+				settings.getProperty(EXPORT_PATH_KEY),
+				extensions
+		);
+		
+		if (file != null)
+		{
+			path = file.getAbsolutePath();
+			settings.setProperty(EXPORT_PATH_KEY, file.getParent());
+			saveFile(path, makeWriter(FileType.XML));
+			raiseSuccessAlert(path, FileAction.EXPORT);
+		}
+	}
+	
+	
+	/**
+	 * Ação ao clicar no item de menu "Export > JSON..."
+	 */
+	@FXML
+	public void onMnitExportJsonAction()
+	{
+		// TODO: Exportar para JSON.
 	}
 	
 	
@@ -370,7 +472,7 @@ public class MainController implements Initializable
 		if (saveConfirmed() != ButtonType.CANCEL)
 		{			
 			addToRecentFilesList(file);
-			loadFile(file);
+			loadFile(file, makeReader(FileType.XLD));
 		}		
 	}
 	
@@ -614,13 +716,24 @@ public class MainController implements Initializable
 	 * 
 	 * @param title O novo título da janela.
 	 */
-	private void reloadMainView(String title)
+	private void reloadMainView(String title, boolean update)
 	{
 		PhrasesPane phrasesPane = (PhrasesPane) viewModes.getFirst();
 		
 		phrasesPane.populateTabs();
 		app.getTitleManager().setTitle(title);
-		app.getFileChangeObserver().update(false);
+		app.getFileChangeObserver().update(update);
+	}
+	
+	
+	/**
+	 * Recarrega a tela principal.
+	 * 
+	 * @param title O novo título da janela.
+	 */
+	private void reloadMainView(String title)
+	{
+		reloadMainView(title, false);
 	}
 	
 	
@@ -628,17 +741,16 @@ public class MainController implements Initializable
 	 * Carrega o arquivo solicitado.
 	 * 
 	 * @param filename O nome do arquivo.
+	 * @param reader O serviço de leitura do arquivo.
 	 */
-	private void loadFile(String filename)
+	private void loadFile(String filename, ReaderService reader)
 	{
 		try
 		{
 			FileManager fileManager = app.getFileManager();
-			Container c = app.getContainer();			
 
-			fileManager.setReader(new XldReaderService(c.getLanguages(), c.getGroups()));
+			fileManager.setReader(reader);
 			fileManager.load(filename);
-			reloadMainView(filename);
 		}
 		catch (Throwable t)
 		{
@@ -653,15 +765,15 @@ public class MainController implements Initializable
 	 * Salva o arquivo solicitado.
 	 * 
 	 * @param filename O nome do arquivo.
+	 * @param write O serviço de escrita do arquivo.
 	 */
-	private void saveFile(String filename)
+	private void saveFile(String filename, WriterService writer)
 	{
 		try
 		{
 			FileManager fileManager = app.getFileManager();
-			Container c = app.getContainer();			
 
-			fileManager.setWriter(new XldWriterService(c.getLanguages(), c.getGroups()));
+			fileManager.setWriter(writer);
 			fileManager.save(filename);
 			app.getFileChangeObserver().update(false);
 		}
@@ -671,5 +783,114 @@ public class MainController implements Initializable
 			Alerts.showError(t);
 			hasErrors = true;
 		}
+	}
+	
+	
+	/**
+	 * Cria o método de leitura de arquivo.
+	 * 
+	 * @param type O tipo de arquivo.
+	 * @return O método de leitura.
+	 */
+	private ReaderService makeReader(FileType type)
+	{
+		Container c = app.getContainer();
+		ReaderService reader;
+		
+		switch (type)
+		{
+		case XLD:
+			reader = new XldReaderService(c.getLanguages(), c.getGroups());
+			break;
+			
+		case XML:
+			reader = new XmlReaderService(c.getLanguages(), c.getGroups());
+			break;
+			
+		case JSON:
+		default:
+			reader = null;
+		}
+		
+		return reader;
+	}
+	
+	
+	/**
+	 * Cria o método de escrita de arquivo.
+	 * 
+	 * @param type O tipo de arquivo.
+	 * @return O método de escrita.
+	 */
+	private WriterService makeWriter(FileType type)
+	{
+		Container c = app.getContainer();
+		WriterService writer;
+		
+		switch (type)
+		{
+		case XLD:
+			writer = new XldWriterService(c.getLanguages(), c.getGroups());
+			break;
+			
+		case XML:
+			writer = new XmlWriterService(c.getLanguages(), c.getGroups());
+			break;
+			
+		case JSON:
+		default:
+			writer = null;
+		}
+		
+		return writer;
+	}
+	
+	
+	/**
+	 * Exibe um alerta quando a importação ou exportação teve êxito.
+	 * 
+	 * @param file Nome do arquivo.
+	 * @param action Ação (<code>imported</code> ou <code>exported</code>)
+	 */
+	private void raiseSuccessAlert(String file, FileAction action)
+	{
+		String title;
+		String message;
+		
+		final boolean imported = action == FileAction.IMPORT;
+		
+		title = new StringBuilder()
+				.append(imported ? "Import" : "Export")
+				.append(" file")
+				.toString();
+
+		message = new StringBuilder()
+				.append("The file ")
+				.append(file)
+				.append(" was ")
+				.append(imported ? "imported" : "exported")
+				.append(" successfully!")
+				.toString();
+		
+		Alerts.showInfo(title, message);
+	}
+	
+	
+	/*
+	 * ===========================================================
+	 * 			*** ENUMERAÇÕES ***
+	 * ===========================================================
+	 */
+	
+	/**
+	 * Representa o tipo de ação do arquivo.
+	 * 
+	 * @author Dr.XGB
+	 * @version 1.0.0
+	 */
+	private enum FileAction
+	{
+		IMPORT,
+		EXPORT,
 	}
 }

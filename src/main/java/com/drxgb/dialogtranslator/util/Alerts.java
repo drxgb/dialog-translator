@@ -16,7 +16,7 @@ import javafx.stage.Stage;
  * Utilitário para formar alertas.
  * 
  * @author Dr.XGB
- * @version 1.0.0
+ * @version 1.0.1
  */
 public abstract class Alerts
 {
@@ -62,6 +62,43 @@ public abstract class Alerts
 		decorateAlert(alert);
 		
 		return alert.showAndWait();
+	}
+	
+	
+	/**
+	 * Mostra um alerta de informação.
+	 * 
+	 * @param title O título do alerta.
+	 * @param message A mensagem do alerta.
+	 * @return O botão do alerta selecionado.
+	 */
+	public static Optional<ButtonType> showInfo(String title, String header, String message)
+	{
+		final App app = App.getInstance();
+		
+		Stage stage = app.getStage();
+		Alert alert = new Alert(AlertType.INFORMATION);
+		
+		alert.initOwner(stage);
+		alert.setTitle(title);
+		alert.setHeaderText(header);
+		alert.setContentText(message);
+		decorateAlert(alert);
+		
+		return alert.showAndWait();
+	}
+	
+	
+	/**
+	 * Mostra um alerta de informação sem o cabeçalho.
+	 * 
+	 * @param title O título do alerta.
+	 * @param message A mensagem do alerta.
+	 * @return O botão do alerta selecionado.
+	 */
+	public static Optional<ButtonType> showInfo(String title, String message)
+	{
+		return showInfo(title, null, message);
 	}
 	
 	

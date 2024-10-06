@@ -10,7 +10,10 @@ import com.drxgb.dialogtranslator.model.PhraseGroup;
 import com.drxgb.util.ByteContainer;
 
 /**
+ * Responsável por salvar arquivos XLD.
  * 
+ * @author Dr.XGB
+ * @version 1.0.0
  */
 public class XldWriterService extends BinaryWriterService
 {

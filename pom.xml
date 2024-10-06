@@ -55,6 +55,21 @@
 			<artifactId>javafx-utils</artifactId>
 			<version>1.7.4</version>
 		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/javax.json/javax.json-api -->
+		<dependency>
+			<groupId>javax.json</groupId>
+			<artifactId>javax.json-api</artifactId>
+			<version>1.1.4</version>
+		</dependency>
+
+
+		<!-- https://mvnrepository.com/artifact/org.glassfish/jakarta.json -->
+		<dependency>
+			<groupId>org.glassfish</groupId>
+			<artifactId>jakarta.json</artifactId>
+			<version>1.1.6</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>Dialog Translator</finalName>

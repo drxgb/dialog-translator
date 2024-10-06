@@ -30,7 +30,7 @@ import javafx.stage.Stage;
  * Aplicação principal.
  * 
  * @author Dr.XGB
- * @version 2.0.0
+ * @version 2.0.1
  */
 public class App extends Application
 {
@@ -48,7 +48,7 @@ public class App extends Application
 	/**
 	 * Versão da aplicação.
 	 */
-	public static final String VERSION = "2.0.0";
+	public static final String VERSION = "2.0.1";
 	
 	/**
 	 * O ano de lançamento da aplicação.
