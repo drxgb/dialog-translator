@@ -13,6 +13,7 @@ import com.drxgb.dialogtranslator.scene.control.cell.PhraseCell;
 import com.drxgb.dialogtranslator.scene.control.cell.SimpleNameCell;
 import com.drxgb.dialogtranslator.service.Container;
 import com.drxgb.dialogtranslator.util.Alerts;
+import com.drxgb.dialogtranslator.util.Constraints;
 import com.drxgb.dialogtranslator.util.FXRootInitializer;
 
 import javafx.application.Platform;
@@ -291,6 +292,7 @@ public class PhraseGroupPane extends ScrollPane implements Initializable
 		txtGroupName.setText(phraseGroup.getName());
 		txtGroupName.requestFocus();
 
+		Constraints.onlyAlphanumericHiphenAndUnderscore(txtGroupName);
 		txtGroupName.textProperty().addListener((obs, oldVal, newVal) ->
 		{
 			tab.setText(newVal);
@@ -358,7 +360,8 @@ public class PhraseGroupPane extends ScrollPane implements Initializable
 	 * Inicializa o filtro de pesquisa das frases.
 	 */
 	private void setupFilters()
-	{		
+	{
+		Constraints.onlyAlphanumericHiphenAndUnderscore(txtFilterPhrases);
 		txtFilterPhrases.textProperty().addListener((obs, oldVal, newVal) ->
 		{
 			String regex = new StringBuilder()
@@ -427,6 +430,7 @@ public class PhraseGroupPane extends ScrollPane implements Initializable
 	 */
 	private void setupPhraseKeyInput()
 	{
+		Constraints.onlyAlphanumericHiphenAndUnderscore(txtPhraseKey);
 		txtPhraseKey.textProperty().addListener((obs, oldVal, newVal) ->
 		{
 			Phrase phrase = (Phrase) txtPhraseKey.getUserData();
