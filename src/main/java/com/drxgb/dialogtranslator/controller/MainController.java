@@ -14,6 +14,8 @@ import com.drxgb.dialogtranslator.component.LanguagesPane;
 import com.drxgb.dialogtranslator.component.PhrasesPane;
 import com.drxgb.dialogtranslator.service.Container;
 import com.drxgb.dialogtranslator.service.io.FileType;
+import com.drxgb.dialogtranslator.service.io.JsonReaderService;
+import com.drxgb.dialogtranslator.service.io.JsonWriterService;
 import com.drxgb.dialogtranslator.service.io.ReaderService;
 import com.drxgb.dialogtranslator.service.io.WriterService;
 import com.drxgb.dialogtranslator.service.io.XldReaderService;
@@ -229,9 +231,12 @@ public class MainController implements Initializable
 			{
 				path = file.getAbsolutePath();
 				settings.setProperty(OPEN_PATH_KEY, file.getParent());
-				loadFile(path, makeReader(FileType.XLD));
-				reloadMainView(path);
-				addToRecentFilesList(path);
+				
+				if (loadFile(path, makeReader(FileType.XLD)))
+				{
+					reloadMainView(path);
+					addToRecentFilesList(path);
+				}
 			}
 		}
 	}
@@ -275,9 +280,12 @@ public class MainController implements Initializable
 		{
 			path = file.getAbsolutePath();
 			settings.setProperty(SAVE_PATH_KEY, file.getParent());
-			saveFile(path, makeWriter(FileType.XLD));
-			addToRecentFilesList(path);
-			app.getTitleManager().setTitle(path);
+			
+			if (saveFile(path, makeWriter(FileType.XLD)))
+			{
+				addToRecentFilesList(path);
+				app.getTitleManager().setTitle(path);
+			}
 		}
 	}
 	
@@ -290,28 +298,7 @@ public class MainController implements Initializable
 	{
 		if (saveConfirmed() != ButtonType.CANCEL)
 		{
-			Stage stage = app.getStage();
-			Properties settings = app.getSettings();
-			List<String> extensions = new ArrayList<>();
-			String path;
-			File file;
-			
-			extensions.add("*.xml");
-			file = FileChooserFactory.openSingleFile(
-					stage,
-					"Import file from XML",
-					"XML files",
-					settings.getProperty(IMPORT_PATH_KEY),
-					extensions
-			);
-			
-			if (file != null)
-			{
-				path = file.getAbsolutePath();
-				settings.setProperty(IMPORT_PATH_KEY, file.getParent());
-				loadFile(path, makeReader(FileType.XML));
-				reloadMainView(null, true);
-			}
+			importFile(FileType.XML);
 		}
 	}
 	
@@ -322,7 +309,10 @@ public class MainController implements Initializable
 	@FXML
 	public void onMnitImportJsonAction()
 	{
-		// TODO: Importar de JSON.
+		if (saveConfirmed() != ButtonType.CANCEL)
+		{
+			importFile(FileType.JSON);
+		}
 	}
 	
 	
@@ -331,29 +321,8 @@ public class MainController implements Initializable
 	 */
 	@FXML
 	public void onMnitExportXmlAction()
-	{
-		Stage stage = app.getStage();
-		Properties settings = app.getSettings();
-		List<String> extensions = new ArrayList<>();
-		String path;
-		File file;
-		
-		extensions.add("*.xml");
-		file = FileChooserFactory.saveFile(
-				stage,
-				"Export file to XML",
-				"XML files",
-				settings.getProperty(EXPORT_PATH_KEY),
-				extensions
-		);
-		
-		if (file != null)
-		{
-			path = file.getAbsolutePath();
-			settings.setProperty(EXPORT_PATH_KEY, file.getParent());
-			saveFile(path, makeWriter(FileType.XML));
-			raiseSuccessAlert(path, FileAction.EXPORT);
-		}
+	{		
+		exportFile(FileType.XML);
 	}
 	
 	
@@ -363,7 +332,7 @@ public class MainController implements Initializable
 	@FXML
 	public void onMnitExportJsonAction()
 	{
-		// TODO: Exportar para JSON.
+		exportFile(FileType.JSON);
 	}
 	
 	
@@ -470,9 +439,12 @@ public class MainController implements Initializable
 	private void onMnitLoadRecentFilesAction(String file)
 	{
 		if (saveConfirmed() != ButtonType.CANCEL)
-		{			
-			addToRecentFilesList(file);
-			loadFile(file, makeReader(FileType.XLD));
+		{
+			if (loadFile(file, makeReader(FileType.XLD)))
+			{
+				reloadMainView(file);
+				addToRecentFilesList(file);
+			}
 		}		
 	}
 	
@@ -742,8 +714,9 @@ public class MainController implements Initializable
 	 * 
 	 * @param filename O nome do arquivo.
 	 * @param reader O serviço de leitura do arquivo.
+	 * @return Se o carregamento houve êxito.
 	 */
-	private void loadFile(String filename, ReaderService reader)
+	private boolean loadFile(String filename, ReaderService reader)
 	{
 		try
 		{
@@ -751,6 +724,8 @@ public class MainController implements Initializable
 
 			fileManager.setReader(reader);
 			fileManager.load(filename);
+			
+			return true;
 		}
 		catch (Throwable t)
 		{
@@ -758,6 +733,8 @@ public class MainController implements Initializable
 			Alerts.showError(t);
 			hasErrors = true;
 		}
+		
+		return false;
 	}
 	
 	
@@ -766,8 +743,9 @@ public class MainController implements Initializable
 	 * 
 	 * @param filename O nome do arquivo.
 	 * @param write O serviço de escrita do arquivo.
+	 * @return Se o salvamento houve êxito.
 	 */
-	private void saveFile(String filename, WriterService writer)
+	private boolean saveFile(String filename, WriterService writer)
 	{
 		try
 		{
@@ -776,6 +754,8 @@ public class MainController implements Initializable
 			fileManager.setWriter(writer);
 			fileManager.save(filename);
 			app.getFileChangeObserver().update(false);
+			
+			return true;
 		}
 		catch (Throwable t)
 		{
@@ -783,6 +763,8 @@ public class MainController implements Initializable
 			Alerts.showError(t);
 			hasErrors = true;
 		}
+		
+		return false;
 	}
 	
 	
@@ -808,6 +790,9 @@ public class MainController implements Initializable
 			break;
 			
 		case JSON:
+			reader = new JsonReaderService(c.getLanguages(), c.getGroups());
+			break;
+
 		default:
 			reader = null;
 		}
@@ -838,6 +823,9 @@ public class MainController implements Initializable
 			break;
 			
 		case JSON:
+			writer = new JsonWriterService(c.getLanguages(), c.getGroups());
+			break;
+
 		default:
 			writer = null;
 		}
@@ -873,6 +861,116 @@ public class MainController implements Initializable
 				.toString();
 		
 		Alerts.showInfo(title, message);
+	}
+	
+	
+	/**
+	 * Ação de importação de arquivo.
+	 * 
+	 * @param type Tipo de arquivo.
+	 */
+	private void importFile(FileType type)
+	{
+		Stage stage = app.getStage();
+		Properties settings = app.getSettings();
+		List<String> extensions = new ArrayList<>();
+		String fileType = type.toString();
+		String fileExtension;
+		String title;
+		String description;
+		String path;
+		File file;
+		
+		fileExtension = new StringBuilder()
+				.append("*.")
+				.append(fileType.toLowerCase())
+				.toString();
+		
+		title = new StringBuilder()
+				.append("Import file from ")
+				.append(fileType)
+				.toString();
+		
+		description = new StringBuilder()
+				.append(fileType)
+				.append(" files")
+				.toString();
+		
+		extensions.add(fileExtension);
+
+		file = FileChooserFactory.openSingleFile(
+				stage,
+				title,
+				description,
+				settings.getProperty(IMPORT_PATH_KEY),
+				extensions
+		);
+		
+		if (file != null)
+		{
+			path = file.getAbsolutePath();
+			settings.setProperty(IMPORT_PATH_KEY, file.getParent());
+			
+			if (loadFile(path, makeReader(type)))
+			{
+				reloadMainView(null, true);
+			}
+		}
+	}
+	
+	
+	/**
+	 * Ação de exportação de arquivo.
+	 * 
+	 * @param type Tipo de arquivo.
+	 */
+	private void exportFile(FileType type)
+	{
+		Stage stage = app.getStage();
+		Properties settings = app.getSettings();
+		List<String> extensions = new ArrayList<>();
+		String fileType = type.toString();
+		String fileExtension;
+		String title;
+		String description;
+		String path;
+		File file;
+		
+		fileExtension = new StringBuilder()
+				.append("*.")
+				.append(fileType.toLowerCase())
+				.toString();
+		
+		title = new StringBuilder()
+				.append("Export file to ")
+				.append(fileType)
+				.toString();
+		
+		description = new StringBuilder()
+				.append(fileType)
+				.append(" files")
+				.toString();
+
+		extensions.add(fileExtension);
+
+		file = FileChooserFactory.saveFile(
+				stage,
+				title,
+				description,
+				settings.getProperty(EXPORT_PATH_KEY),
+				extensions
+		);
+		
+		if (file != null)
+		{
+			path = file.getAbsolutePath();
+			settings.setProperty(EXPORT_PATH_KEY, file.getParent());
+
+			if (saveFile(path, makeWriter(type)))
+			{
+				raiseSuccessAlert(path, FileAction.EXPORT);
+			}
+		}
 	}
 	
 	
